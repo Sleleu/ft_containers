@@ -6,7 +6,7 @@
 /*   By: sleleu <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/09 00:20:41 by sleleu            #+#    #+#             */
-/*   Updated: 2023/01/09 00:32:30 by sleleu           ###   ########.fr       */
+/*   Updated: 2023/01/09 01:39:41 by sleleu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,17 @@
 
 namespace ft
 {
+
+		/*--------------------------*/
+		/*      FT::ENABLE_IF       */
+		/*--------------------------*/
+
+	template < bool B, class T = void >
+	struct enable_if {};
+
+	template <typename T>
+	struct enable_if<true, T> {typedef T type; };
+	
 		/*--------------------------*/
 		/*      FT::IS_INTEGRAL     */
 		/*--------------------------*/

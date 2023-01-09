@@ -6,7 +6,7 @@
 /*   By: sleleu <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/08 20:17:17 by sleleu            #+#    #+#             */
-/*   Updated: 2023/01/09 00:32:09 by sleleu           ###   ########.fr       */
+/*   Updated: 2023/01/09 01:55:59 by sleleu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,15 @@
 #define BOLDWHITE   "\033[1m\033[37m"      /* Bold White */
 
 // TESTS
+
+template<typename T>
+typename ft::enable_if<ft::is_integral<T>::value, T>::type
+ft_enable_if_test(T x) { return x * 2; }; // This function will only work with integral type
+
+template<typename T>
+typename std::enable_if<std::is_integral<T>::value, T>::type
+std_enable_if_test(T x) { return x * 2; }; // This function will only work with integral type
+
 
 int main(void)
 {
@@ -157,5 +166,18 @@ int main(void)
     std::cout << ft::is_integral<bool>::value << "\n";
     std::cout << ft::is_integral<const bool>::value << "\n" << RESET;
 
+	std::cout << BOLDMAGENTA << "\n\n FT::ENABLE_IF TEST \n\n";
+	
+	int i_test = 2;
+	std::cout << BOLDYELLOW << "Result of enable_if std : " << ft_enable_if_test(i_test) << std::endl;
+	std::cout <<  BOLDCYAN << "Result of enable_if ft : " << std_enable_if_test(i_test) << std::endl << RESET;
+
+	// Can't compile with float
+	/*
+	float f_test = 2;
+	std::cout << "Result of enable_if std : " << ft_enable_if_function_test(f_test) << std::endl;
+	std::cout << "Result of enable_if std : " << std_enable_if_function_test(f_test) << std::endl;
+	*/
+	
     return (0);
 }
