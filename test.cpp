@@ -3,15 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   test.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sleleu <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: sleleu <sleleu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/08 20:17:17 by sleleu            #+#    #+#             */
-/*   Updated: 2023/01/09 01:55:59 by sleleu           ###   ########.fr       */
+/*   Updated: 2023/01/09 21:34:26 by sleleu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <iostream>
+#include <iomanip>
 #include <type_traits>
+#include <iterator>
+#include <vector>
+#include <list>
 #include "std_implementation.hpp"
 
 #define RESET   "\033[0m"
@@ -42,6 +46,34 @@ template<typename T>
 typename std::enable_if<std::is_integral<T>::value, T>::type
 std_enable_if_test(T x) { return x * 2; }; // This function will only work with integral type
 
+
+// ITERATOR TEST FUNCTION
+
+template<class BidirIt>
+void std_my_reverse(BidirIt first, BidirIt last)
+{
+    typename std::iterator_traits<BidirIt>::difference_type n = std::distance(first, last);
+    --n;
+    while(n > 0) {
+        typename std::iterator_traits<BidirIt>::value_type tmp = *first;
+        *first++ = *--last;
+        *last = tmp;
+        n -= 2;
+    }
+}
+
+template<class BidirIt>
+void ft_my_reverse(BidirIt first, BidirIt last)
+{
+    typename std::iterator_traits<BidirIt>::difference_type n = std::distance(first, last);
+    --n;
+    while(n > 0) {
+        typename std::iterator_traits<BidirIt>::value_type tmp = *first;
+        *first++ = *--last;
+        *last = tmp;
+        n -= 2;
+    }
+}
 
 int main(void)
 {
@@ -178,6 +210,22 @@ int main(void)
 	std::cout << "Result of enable_if std : " << ft_enable_if_function_test(f_test) << std::endl;
 	std::cout << "Result of enable_if std : " << std_enable_if_function_test(f_test) << std::endl;
 	*/
-	
+
+	std::cout << BOLDMAGENTA << "\n\n FT::ITERATOR_TRAITS TEST \n\n";
+
+    std::vector<int> v{1, 2, 3, 4, 5};
+    my_reverse(v.begin(), v.end());
+    for (int n : v) {
+        std::cout << n << ' ';
+    }
+    std::cout << '\n';
+ 
+    std::list<int> l{1, 2, 3, 4, 5};
+    my_reverse(l.begin(), l.end());
+    for (auto n : l) {
+        std::cout << n << ' ';
+    }
+    std::cout << '\n';
+
     return (0);
 }
