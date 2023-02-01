@@ -68,27 +68,27 @@ int main (void)
 //------------- EMPTY TEST ---------------------------------------------------------------------------------
 		std::cout << std::boolalpha; // display true | false instead of 0 | 1
 
-		std::cout << BOLDGREEN << "\nSTACK EMPTY TEST\n";
+	std::cout << BOLDGREEN << "\nSTACK EMPTY TEST\n";
 
 		std::cout << BOLDYELLOW << "std:\n";
 		std::cout << "empty int stack: " << std_stack_int.empty() << std::endl;
 		std::cout << "empty string stack: " << std_stack_string.empty() << std::endl;
 		std::cout << "empty empty stack: " << std_empty_stack.empty() << std::endl;
-		std_empty_stack.push(1);
+		std_empty_stack.push(42);
 		std::cout << "empty stack after push : " << std_empty_stack.empty() << std::endl;
 
 		std::cout << BOLDCYAN << "ft:\n";
 		std::cout << "empty int stack: " << ft_stack_int.empty() << std::endl;
 		std::cout << "empty string stack: " << ft_stack_string.empty() << std::endl;
 		std::cout << "empty empty stack: " << ft_empty_stack.empty() << std::endl;
-		ft_empty_stack.push(1);
+		ft_empty_stack.push(42);
 		std::cout << "empty stack after push : " << ft_empty_stack.empty() << std::endl;
 //----------------------------------------------------------------------------------------------------------
 
 
 
 //------------ POP TEST ------------------------------------------------------------------------------------
-		std::cout << BOLDGREEN << "\nSTACK POP TEST\n";
+	std::cout << BOLDGREEN << "\nSTACK POP TEST\n";
 
 		std::cout << BOLDYELLOW << "std:\n";
 		std::cout << "string stack BEFORE pop | top : " << std_stack_string.top() << " | size : " << std_stack_string.size() << std::endl;
@@ -100,7 +100,90 @@ int main (void)
 		ft_stack_string.pop();
 		std::cout << "string stack AFTER pop | top : " << ft_stack_string.top() << " | size : " << ft_stack_string.size() << std::endl;
 //----------------------------------------------------------------------------------------------------------
-	
+
+
+//------------- OPERATORS ----------------------------------------------------------------------------------
+
+	std::cout << BOLDGREEN << "\nOPERATOR = TEST\n";
+		std::cout << BOLDYELLOW << "std:\n"; // value 42 in empty stack added after empty test
+		std::cout << "BEFORE ASSIGN empty stack to int stack : " << std_empty_stack.top() << std::endl;
+		std_empty_stack = std_stack_int;
+		std::cout << "AFTER ASSIGN empty stack to int stack : " << std_empty_stack.top() << std::endl;
+		std::cout << BOLDCYAN << "ft:\n";
+		std::cout << "BEFORE assign empty stack to int stack : " << ft_empty_stack.top() << std::endl;
+		ft_empty_stack = ft_stack_int;
+		std::cout << "AFTER assign empty stack to int stack : " << ft_empty_stack.top() << std::endl;
+
+	std::cout << BOLDGREEN << "\nOPERATOR == TEST\n";
+		std::cout << BOLDYELLOW << "std:\n";
+		if (std_stack_int == std_empty_stack)
+			std::cout << "same" << std::endl;
+		std::cout << BOLDCYAN << "ft:\n";
+		if (ft_stack_int == ft_empty_stack)
+			std::cout << "same" << std::endl;
+
+	std::cout << BOLDGREEN << "\nOPERATOR < TEST\n";
+		std::cout << BOLDYELLOW << "std:\n";
+		if (std_stack_int < std_empty_stack)
+			std::cout << "inferior" << std::endl;
+		else
+			std::cout << "not inferior" << std::endl;
+		std::cout << BOLDCYAN << "ft:\n";
+		if (ft_stack_int < ft_empty_stack)
+			std::cout << "inferior" << std::endl;
+		else
+			std::cout << "not inferior" << std::endl;
+
+	std::cout << BOLDGREEN << "\nOPERATOR > TEST\n";
+		std::cout << BOLDYELLOW << "std:\n";
+		if (std_stack_int > std_empty_stack)
+			std::cout << "superior" << std::endl;
+		else
+			std::cout << "not superior" << std::endl;
+		std::cout << BOLDCYAN << "ft:\n";
+		if (ft_stack_int > ft_empty_stack)
+			std::cout << "superior" << std::endl;
+		else
+			std::cout << "not superior" << std::endl;
+
+	std::cout << BOLDGREEN << "\nOPERATOR != TEST\n";
+		std::cout << BOLDYELLOW << "std:\n";
+		if (std_stack_int != std_empty_stack)
+			std::cout << "is different" << std::endl;
+		else
+			std::cout << "not different" << std::endl;
+		std::cout << BOLDCYAN << "ft:\n";
+		if (ft_stack_int != ft_empty_stack)
+			std::cout << "is different" << std::endl;
+		else
+			std::cout << "not different" << std::endl;
+
+	std::cout << BOLDGREEN << "\nOPERATOR <= TEST\n";
+		std::cout << BOLDYELLOW << "std:\n";
+		if (std_stack_int <= std_empty_stack)
+			std::cout << "is inferior or equal" << std::endl;
+		else
+			std::cout << "not inferior or equal" << std::endl;
+		std::cout << BOLDCYAN << "ft:\n";
+		if (ft_stack_int <= ft_empty_stack)
+			std::cout << "is inferior or equal" << std::endl;
+		else
+			std::cout << "not inferior or equal" << std::endl;
+
+	std::cout << BOLDGREEN << "\nOPERATOR >= TEST\n";
+		std::cout << BOLDYELLOW << "std:\n";
+		if (std_stack_int >= std_empty_stack)
+			std::cout << "is superior or equal" << std::endl;
+		else
+			std::cout << "not superior or equal" << std::endl;
+		std::cout << BOLDCYAN << "ft:\n";
+		if (ft_stack_int >= ft_empty_stack)
+			std::cout << "is superior or equal" << std::endl;
+		else
+			std::cout << "not superior or equal" << std::endl;
+
+//----------------------------------------------------------------------------------------------------------
+
 	std::cout << RESET;
 
 	return (0);
