@@ -6,7 +6,7 @@
 /*   By: sleleu <sleleu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/09 00:20:41 by sleleu            #+#    #+#             */
-/*   Updated: 2023/01/09 20:56:38 by sleleu           ###   ########.fr       */
+/*   Updated: 2023/01/31 16:11:04 by sleleu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,23 @@ namespace ft
 		typedef	const T&	reference;
 		typedef std::random_access_iterator_tag	iterator_category;
 	};
+
+		/*--------------------------*/
+		/*   FT::REVERSE_ITERATOR   */
+		/*--------------------------*/	
+
+	template <class Iterator>
+	class reverse_iterator
+	{
+		public:
+		
+		typedef typename iterator_traits<Iterator>::iterator_category iterator_category;
+		typedef typename iterator_traits<Iterator>::difference_type difference_type;
+		typedef typename iterator_traits<Iterator>::value_type value_type;
+		typedef typename iterator_traits<Iterator>::pointer pointer;
+		typedef typename iterator_traits<Iterator>::reference reference;
+	};
+
 
 		/*--------------------------*/
 		/*      FT::ENABLE_IF       */

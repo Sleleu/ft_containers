@@ -6,7 +6,7 @@
 /*   By: sleleu <sleleu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/08 20:17:17 by sleleu            #+#    #+#             */
-/*   Updated: 2023/01/09 21:34:26 by sleleu           ###   ########.fr       */
+/*   Updated: 2023/01/31 14:20:14 by sleleu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,9 @@ typename std::enable_if<std::is_integral<T>::value, T>::type
 std_enable_if_test(T x) { return x * 2; }; // This function will only work with integral type
 
 
-// ITERATOR TEST FUNCTION
-
-template<class BidirIt>
+// ITERATOR TEST FUNCTIONS
+//-------------------------------------------------------------------------------------------------------------------------------
+template<class BidirIt> // bidirectionnal iterator, this class can be used with this
 void std_my_reverse(BidirIt first, BidirIt last)
 {
     typename std::iterator_traits<BidirIt>::difference_type n = std::distance(first, last);
@@ -65,20 +65,23 @@ void std_my_reverse(BidirIt first, BidirIt last)
 template<class BidirIt>
 void ft_my_reverse(BidirIt first, BidirIt last)
 {
-    typename std::iterator_traits<BidirIt>::difference_type n = std::distance(first, last);
+    typename ft::iterator_traits<BidirIt>::difference_type n = std::distance(first, last);
     --n;
     while(n > 0) {
-        typename std::iterator_traits<BidirIt>::value_type tmp = *first;
+        typename ft::iterator_traits<BidirIt>::value_type tmp = *first;
         *first++ = *--last;
         *last = tmp;
         n -= 2;
     }
 }
+//-------------------------------------------------------------------------------------------------------------------------------
+
+
 
 int main(void)
 {
 
-	std::cout << BOLDMAGENTA << "\n\n FT::IS_INTEGRAL COMPLETE TESTS \n\n";
+	std::cout << BOLDMAGENTA << "\n\n FT::IS_INTEGRAL COMPLETE TESTS (STD::IS_INTEGRAL NOT EXIST IN C++98) \n\n";
     
 	std::cout << std::boolalpha;
 
@@ -213,19 +216,23 @@ int main(void)
 
 	std::cout << BOLDMAGENTA << "\n\n FT::ITERATOR_TRAITS TEST \n\n";
 
+	std::cout << BOLDYELLOW << "Result of iterator_traits std : " << std::endl;
     std::vector<int> v{1, 2, 3, 4, 5};
-    my_reverse(v.begin(), v.end());
+    std_my_reverse(v.begin(), v.end());
     for (int n : v) {
         std::cout << n << ' ';
     }
     std::cout << '\n';
- 
+
+	std::cout <<  BOLDCYAN << "Result of iterator_traits ft : " << std::endl << RESET;
     std::list<int> l{1, 2, 3, 4, 5};
-    my_reverse(l.begin(), l.end());
+    ft_my_reverse(l.begin(), l.end());
     for (auto n : l) {
         std::cout << n << ' ';
     }
     std::cout << '\n';
+
+	std::cout << RESET;
 
     return (0);
 }
