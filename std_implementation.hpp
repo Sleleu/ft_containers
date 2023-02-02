@@ -6,7 +6,7 @@
 /*   By: sleleu <sleleu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/09 00:20:41 by sleleu            #+#    #+#             */
-/*   Updated: 2023/02/02 13:54:45 by sleleu           ###   ########.fr       */
+/*   Updated: 2023/02/02 15:56:09 by sleleu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,65 +17,6 @@
 
 namespace ft
 {
-
-		/*--------------------------*/
-		/*   FT::ITERATOR_TRAITS    */
-		/*--------------------------*/
-	template <class Iterator>
-	struct iterator_traits
-	{
-		typedef typename	Iterator::difference_type	difference_type;
-		typedef	typename	Iterator::value_type	value_type;
-		typedef typename	Iterator::pointer	pointer;
-		typedef typename	Iterator::reference	reference;
-		typedef typename	Iterator::iterator_category	iterator_category;
-	};
-
-	template <class T>
-	struct iterator_traits<T*>
-	{
-		typedef	std::ptrdiff_t	difference_type;
-		typedef	T	value_type;
-		typedef	T*	pointer;
-		typedef	T&	reference;
-		typedef	typename	std::random_access_iterator_tag	iterator_category;
-	};
-
-	template <class T>
-	struct iterator_traits<const T*>
-	{
-		typedef	std::ptrdiff_t	difference_type;
-		typedef	T	value_type;
-		typedef	const T*	pointer;
-		typedef	const T&	reference;
-		typedef std::random_access_iterator_tag	iterator_category;
-	};
-
-		/*--------------------------*/
-		/*   FT::REVERSE_ITERATOR   */
-		/*--------------------------*/	
-
-	template <class Iterator>
-	class reverse_iterator
-	{
-		public:
-		
-		typedef typename ft::iterator_traits<Iterator>::iterator_category iterator_category;
-		typedef typename ft::iterator_traits<Iterator>::difference_type difference_type;
-		typedef typename ft::iterator_traits<Iterator>::value_type value_type;
-		typedef typename ft::iterator_traits<Iterator>::pointer pointer;
-		typedef typename ft::iterator_traits<Iterator>::reference reference;
-
-
-		bool operator==( const reverse_iterator<Iterator>& rhs) { return (this->current == rhs.current); }
-		bool operator
-		
-		protected:
-
-		Iterator current;
-		
-	};
-
 
 		/*--------------------------*/
 		/*      FT::ENABLE_IF       */
