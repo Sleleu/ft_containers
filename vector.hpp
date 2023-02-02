@@ -6,45 +6,49 @@
 /*   By: sleleu <sleleu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 18:58:07 by sleleu            #+#    #+#             */
-/*   Updated: 2023/01/03 15:44:41 by sleleu           ###   ########.fr       */
+/*   Updated: 2023/02/02 17:56:54 by sleleu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <iostream>
 #include <memory>
+#include "iterator.hpp"
 
 #ifndef VECTOR_HPP
 #define VECTOR_HPP
 
-template < class T, class Alloc = std::allocator<T> >
+template < class T, class Allocator = std::allocator<T> >
 class vector
-{	
-	typedef Allocator	allocator_type;
-    typedef typename Allocator::size_type                   size_type;
-	
-	typedef	T			value_type;
-    typedef  ft::random_access_iterator<value_type>         iterator;
-	
+{
+
 	public:
 
-	// CONSTRUCTORS
-	vector(const T value) // TEST CONSTRUCTOR
-	{
-		int i = 0;
-		this->_vector = new T[value];
-		while (i < value)
-		{
-			this->_vector[i] = 97 + i;
-			i++;
-		}
-	}
-	explicit vector(const allocator_type& Alloc = allocator_type()) {} // default
-	explicit vector (size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type()) {} // fill
-	template <class InputIterator>	vector(InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type()) {} // range
-	vector(const vector& x) {} // copy
 
-	// DESTRUCTOR
-	~vector() {};
+//----------------------- MEMBER TYPES ------------------------------------------------------------
+	typedef	T												value_type;
+	typedef Allocator 										allocator_type;
+	typedef std::size_t										size_type;
+	typedef std::ptrdiff_t									difference_type;
+	typedef value_type&										reference;
+	typedef const value_type&								const_reference;
+	typedef Allocator::pointer								pointer;
+	typedef Allocator::const_pointer						const_pointer;
+	typedef ft::random_access_iterator<value_type>			iterator;
+	typedef ft::random_access_iterator<const value_type>	const_iterator;
+	typedef ft::reverse_iterator<iterator>					reverse_iterator;
+	typedef ft::reverse_iterator<const_iterator>			const_reverse_iterator;
+//-------------------------------------------------------------------------------------------------
+
+
+//------------------------ CONSTRUCTORS | DESTRUCTOR ----------------------------------------------
+	vector(); // Constructs an empty container with a default-constructed allocator
+	explicit vector( const Allocator& alloc ); // Constructs an empty container with the given allocator alloc
+	explicit vector(size_type count, const T& value = T(), const Allocator& alloc = Allocator()); // Constructs the container with count copies of elements with value value
+	template < class InputIt >
+	vector(InputIt first, InputIt last, const Allocator& alloc = Allocator()); // Constructs the container with the contents of the range (first,last)
+	vector(const vector& other); // Constructs the container with the copy of the contents of other
+	~vector() {} // Destructs the vector
+//-------------------------------------------------------------------------------------------------
 	
 	// MEMBER FUNCTIONS
 	// assign();
