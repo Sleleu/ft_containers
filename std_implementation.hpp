@@ -6,7 +6,7 @@
 /*   By: sleleu <sleleu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/09 00:20:41 by sleleu            #+#    #+#             */
-/*   Updated: 2023/01/31 16:11:04 by sleleu           ###   ########.fr       */
+/*   Updated: 2023/02/02 13:54:45 by sleleu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,11 +60,20 @@ namespace ft
 	{
 		public:
 		
-		typedef typename iterator_traits<Iterator>::iterator_category iterator_category;
-		typedef typename iterator_traits<Iterator>::difference_type difference_type;
-		typedef typename iterator_traits<Iterator>::value_type value_type;
-		typedef typename iterator_traits<Iterator>::pointer pointer;
-		typedef typename iterator_traits<Iterator>::reference reference;
+		typedef typename ft::iterator_traits<Iterator>::iterator_category iterator_category;
+		typedef typename ft::iterator_traits<Iterator>::difference_type difference_type;
+		typedef typename ft::iterator_traits<Iterator>::value_type value_type;
+		typedef typename ft::iterator_traits<Iterator>::pointer pointer;
+		typedef typename ft::iterator_traits<Iterator>::reference reference;
+
+
+		bool operator==( const reverse_iterator<Iterator>& rhs) { return (this->current == rhs.current); }
+		bool operator
+		
+		protected:
+
+		Iterator current;
+		
 	};
 
 
