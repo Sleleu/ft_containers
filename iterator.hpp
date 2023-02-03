@@ -6,7 +6,7 @@
 /*   By: sleleu <sleleu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 13:55:32 by sleleu            #+#    #+#             */
-/*   Updated: 2023/02/03 12:05:45 by sleleu           ###   ########.fr       */
+/*   Updated: 2023/02/03 14:17:53 by sleleu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ namespace ft
 
 //-------------------------- MEMBER FUNCTIONS -----------------------------------------------------
 		template< class U >
-		reverse_iterator& operator=( const reverse_iterator<U>& other) { return (*this);                          }
+		reverse_iterator& operator=( const reverse_iterator<U>& other) { *this = other; return (*this);           }
 		reference operator*() const                                    { Iterator tmp = current; return (*--tmp); }	
 		pointer operator->() const                                     { return &(this->operator*());             }
 		reverse_iterator& operator++()                                 { --current; return (*this);               }
@@ -132,23 +132,23 @@ namespace ft
 	}; // reverse_iterator
 
 //------------------------- NON-MEMBER FUNCTIONS --------------------------------------------------
-		template <Iterator>
-		bool operator==(const reverse_iterator<Iterator>& lhs ,const reverse_iterator<Iterator>& rhs)
+		template <class first, class second>
+		bool operator==(const reverse_iterator<first>& lhs ,const reverse_iterator<second>& rhs)
 		{ return (lhs.base() == rhs.base()); }
-		template <Iterator>
-		bool operator< (const reverse_iterator<Iterator>& lhs ,const reverse_iterator<Iterator>& rhs)
+		template <class first, class second>
+		bool operator< (const reverse_iterator<first>& lhs ,const reverse_iterator<second>& rhs)
 		{ return (lhs.base() <  rhs.base()); }
-		template <Iterator>
-		bool operator> (const reverse_iterator<Iterator>& lhs ,const reverse_iterator<Iterator>& rhs)
+		template <class first, class second>
+		bool operator> (const reverse_iterator<first>& lhs ,const reverse_iterator<second>& rhs)
 		{ return (lhs.base() >  rhs.base()); }
-		template <Iterator>
-		bool operator!=(const reverse_iterator<Iterator>& lhs ,const reverse_iterator<Iterator>& rhs)
+		template <class first, class second>
+		bool operator!=(const reverse_iterator<first>& lhs ,const reverse_iterator<second>& rhs)
 		{ return (lhs.base() != rhs.base()); }
-		template <Iterator>
-		bool operator<=(const reverse_iterator<Iterator>& lhs ,const reverse_iterator<Iterator>& rhs)
+		template <class first, class second>
+		bool operator<=(const reverse_iterator<first>& lhs ,const reverse_iterator<second>& rhs)
 		{ return (lhs.base() <= rhs.base()); }
-		template <Iterator>
-		bool operator>=(const reverse_iterator<Iterator>& lhs ,const reverse_iterator<Iterator>& rhs)
+		template <class first, class second>
+		bool operator>=(const reverse_iterator<first>& lhs ,const reverse_iterator<second>& rhs)
 		{ return (lhs.base() >= rhs.base()); }	
 //-------------------------------------------------------------------------------------------------
 
@@ -172,19 +172,18 @@ namespace ft
 		~random_access_iterator() {}
 
 //-------------------------- MEMBER FUNCTIONS -----------------------------------------------------
-		pointer base() const { return this->current; } // getter
 		template< class U >
-		random_access_iterator& operator=( const random_access_iterator<U>& other) { return (*this);                          }
-		reference operator*() const                                    { pointer tmp = current; return (*++tmp); }	
-		pointer operator->() const                                     { return &(this->operator*());             }
-		random_access_iterator& operator++()                                 { ++current; return (*this);               }
-		random_access_iterator& operator--()                                 { --current; return (*this);               }
-		random_access_iterator& operator+=( difference_type n )              { current += n; return (*this);            }
-		random_access_iterator& operator-=( difference_type n )              { current -= n; return (*this);            }
-		random_access_iterator operator+( difference_type n )                { return (random_access_iterator(current + n));  }
-		random_access_iterator operator-( difference_type n )                { return (random_access_iterator(current - n));  }
-		reference operator[]( difference_type n ) const                { return (current[-n-1]);                  }
-		pointer base() const /* getter  */                             { return this->current;                    }
+		random_access_iterator& operator=( const random_access_iterator<U>& other) { *this = other; return (*this); }
+		reference operator*() const                              { pointer tmp = current; return (*++tmp); }	
+		pointer operator->() const                               { return &(this->operator*());            }
+		random_access_iterator& operator++()                     { ++current; return (*this);              }
+		random_access_iterator& operator--()                     { --current; return (*this);              }
+		random_access_iterator& operator+=( difference_type n )  { current += n; return (*this);           }
+		random_access_iterator& operator-=( difference_type n )  { current -= n; return (*this);           }
+		random_access_iterator operator+( difference_type n )    { return (random_access_iterator(current + n)); }
+		random_access_iterator operator-( difference_type n )    { return (random_access_iterator(current - n)); }
+		reference operator[]( difference_type n ) const          { return (current[-n-1]);                 }
+		pointer base() const /* getter  */                       { return this->current;                   }
 		random_access_iterator operator++(int) { // post incrementation
 			random_access_iterator tmp = *this;
 			++current;
