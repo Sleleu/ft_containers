@@ -6,7 +6,7 @@
 /*   By: sleleu <sleleu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 18:58:07 by sleleu            #+#    #+#             */
-/*   Updated: 2023/02/03 13:59:53 by sleleu           ###   ########.fr       */
+/*   Updated: 2023/02/03 17:04:12 by sleleu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,17 +24,15 @@ namespace ft
 	{
 
 		public:
-
-
 //----------------------- MEMBER TYPES ------------------------------------------------------------
-		typedef	T												value_type;
+		typedef T												value_type;
 		typedef Allocator 										allocator_type;
 		typedef size_t									        size_type;
 		typedef std::ptrdiff_t									difference_type;
-		typedef value_type&										reference;
-		typedef const value_type&								const_reference;
-		typedef typename Allocator::pointer								pointer;
-		typedef typename Allocator::const_pointer						const_pointer;
+		typedef typename allocator_type::reference				reference;
+		typedef typename allocator_type::const_reference		const_reference;
+		typedef typename allocator_type::pointer				pointer;
+		typedef typename allocator_type::const_pointer			const_pointer;
 		typedef typename ft::random_access_iterator<value_type>			iterator;
 		typedef typename ft::random_access_iterator<const value_type>	const_iterator;
 		typedef typename ft::reverse_iterator<iterator>					reverse_iterator;
@@ -43,12 +41,23 @@ namespace ft
 
 
 //------------------------ CONSTRUCTORS | DESTRUCTOR ----------------------------------------------
-		vector() { } // Constructs an empty container with a default-constructed allocator
-		explicit vector( const Allocator& alloc ); // Constructs an empty container with the given allocator alloc
-		explicit vector(size_type count, const T& value = T(), const Allocator& alloc = Allocator()); // Constructs the container with count copies of elements with value value
-		template < class InputIt >
-		vector(InputIt first, InputIt last, const Allocator& alloc = Allocator()); // Constructs the container with the contents of the range (first,last)
-		vector(const vector& other); // Constructs the container with the copy of the contents of other
+		
+		vector () {} // in source code of std, useless
+		/* 1 | default | Constructs an empty container with the given allocator alloc */
+		explicit vector(const allocator_type& alloc = allocator_type())
+		: _alloc(alloc), _size(0), _capacity(0) { }
+		/* 2 | fill | Constructs the container with count copies of elements with value */
+		explicit vector(size_type n, const value_type& value = value_type(), const allocator_type& alloc = allocator_type())
+		: _alloc(alloc), _size(n), _capacity(n)
+		{
+			_vector = _alloc.allocate(_capacity);
+			for (size_type i = 0; i < _capacity; i++)
+				_alloc.construct(&_vector[i] , value); // Constructs an element object on the location pointed by ptr
+		} 
+
+	//	template < class InputIt >
+	//	vector(InputIt first, InputIt last, const Allocator& alloc = Allocator()); // Constructs the container with the contents of the range (first,last)
+	//	vector(const vector& other); // Constructs the container with the copy of the contents of other
 		~vector() {} // Destructs the vector
 //-------------------------------------------------------------------------------------------------
 
@@ -56,7 +65,7 @@ namespace ft
 //--------------------------- MEMBER FUNCTIONS ----------------------------------------------------
 		
 		vector& operator=(const vector& other) { *this = other; return (*this); }
-		allocator_type get_allocator() const { return (Allocator(_allocator)); }
+		allocator_type get_allocator() const { return (Allocator(_alloc)); }
 
 		//-------------- ITERATORS -----------------------------------
 
@@ -82,7 +91,7 @@ namespace ft
 
 		//--------------- MODIFIERS ---------------------------------
 		
-		// void push_back(const T& value);
+		//void push_back(const value_type& val) { }
 		// void pop_back(); // Removes the last element of the container
 		// iterator insert(const_iterator pos, const T& value);
 		// iterator insert(const_iterator pos, size_type count, const T& value);
@@ -111,7 +120,7 @@ namespace ft
 		private:
 		
 		pointer         _vector;
-		allocator_type  _allocator;
+		allocator_type  _alloc;
 		size_type		_size;
 		size_type		_capacity;
 
