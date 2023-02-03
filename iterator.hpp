@@ -6,7 +6,7 @@
 /*   By: sleleu <sleleu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 13:55:32 by sleleu            #+#    #+#             */
-/*   Updated: 2023/02/03 14:41:53 by sleleu           ###   ########.fr       */
+/*   Updated: 2023/02/03 18:54:20 by sleleu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,9 +99,9 @@ namespace ft
 		typedef typename ft::iterator_traits<Iterator>::reference         reference;
 
 		reverse_iterator() { this->current = NULL; };
-		explicit reverse_iterator( iterator_type x ) { this->current = x; };
-		template< class U >
-		reverse_iterator( const reverse_iterator<U>& other ) { this->current = other.current; };
+		explicit reverse_iterator( iterator_type it ) { this->current = it; };
+		template< class Iter >
+		reverse_iterator( const reverse_iterator<Iter>& other ) { this->current = other.current; };
 
 //-------------------------- MEMBER FUNCTIONS -----------------------------------------------------
 		template< class U >
@@ -184,7 +184,7 @@ namespace ft
 		random_access_iterator operator+( difference_type n )    { return (random_access_iterator(current + n)); }
 		random_access_iterator operator-( difference_type n )    { return (random_access_iterator(current - n)); }
 		reference operator[]( difference_type n ) const          { return (current[-n-1]);                 }
-		pointer base() const /* getter  */                       { return this->current;                   }
+		pointer base() const /* getter  BUG HERE */              { return current;                         }
 		random_access_iterator operator++(int) { // post incrementation
 			random_access_iterator tmp = *this;
 			++current;
@@ -199,22 +199,22 @@ namespace ft
 	}; // random_access_iterator
 
 //------------------------- NON-MEMBER FUNCTIONS --------------------------------------------------
-	template <typename first, typename second>
+	template <class first, class second>
 	bool operator==(const random_access_iterator<first>& lhs, const random_access_iterator<second>& rhs)
 	{ return (lhs.base() == rhs.base()); }
-	template <typename first, typename second>
+	template <class first, class second>
 	bool operator!=(const random_access_iterator<first>& lhs, const random_access_iterator<second>& rhs)
 	{ return (lhs.base() != rhs.base()); }
-	template <typename first, typename second>
+	template <class first, class second>
 	bool operator< (const random_access_iterator<first>& lhs, const random_access_iterator<second>& rhs)
 	{ return (lhs.base() < rhs.base()); }
-	template <typename first, typename second>
+	template <class first, class second>
 	bool operator> (const random_access_iterator<first>& lhs, const random_access_iterator<second>& rhs)
 	{ return (lhs.base() > rhs.base()); }
-	template <typename first, typename second>
+	template <class first, class second>
 	bool operator<=(const random_access_iterator<first>& lhs, const random_access_iterator<second>& rhs)
 	{ return (lhs.base() <= rhs.base()); }
-	template <typename first, typename second>
+	template <class first, class second>
 	bool operator>=(const random_access_iterator<first>& lhs, const random_access_iterator<second>& rhs)
 	{ return (lhs.base() >= rhs.base()); }
 //-------------------------------------------------------------------------------------------------

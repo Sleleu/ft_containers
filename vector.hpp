@@ -6,12 +6,13 @@
 /*   By: sleleu <sleleu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 18:58:07 by sleleu            #+#    #+#             */
-/*   Updated: 2023/02/03 17:04:12 by sleleu           ###   ########.fr       */
+/*   Updated: 2023/02/03 18:14:47 by sleleu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <iostream>
 #include <memory>
+#include <limits>
 #include "iterator.hpp"
 
 #ifndef VECTOR_HPP
@@ -41,17 +42,16 @@ namespace ft
 
 
 //------------------------ CONSTRUCTORS | DESTRUCTOR ----------------------------------------------
-		
-		vector () {} // in source code of std, useless
+
 		/* 1 | default | Constructs an empty container with the given allocator alloc */
 		explicit vector(const allocator_type& alloc = allocator_type())
-		: _alloc(alloc), _size(0), _capacity(0) { }
+		: _alloc(alloc), _size(0), _capacity(0) {}
 		/* 2 | fill | Constructs the container with count copies of elements with value */
 		explicit vector(size_type n, const value_type& value = value_type(), const allocator_type& alloc = allocator_type())
 		: _alloc(alloc), _size(n), _capacity(n)
 		{
 			_vector = _alloc.allocate(_capacity);
-			for (size_type i = 0; i < _capacity; i++)
+			for (size_type i = 0; i < n; i++)
 				_alloc.construct(&_vector[i] , value); // Constructs an element object on the location pointed by ptr
 		} 
 
@@ -84,16 +84,19 @@ namespace ft
 		//-------------- CAPACITY -----------------------------------
 		bool empty() const { return _size == 0; }
 		size_type size() const { return (_size); }
-		//size_type max_size() const;
+		size_type max_size() const { return std::numeric_limits<difference_type>::max(); } // FALSE VALUE
 		//void reserve(size_type new_cap);
 		size_type capacity() const { return (_capacity); }
 		//-----------------------------------------------------------
 
 		//--------------- MODIFIERS ---------------------------------
 		
-		//void push_back(const value_type& val) { }
+		void push_back(const value_type& val)
+		{ 
+			this->insert(this->end(), val);
+		}
 		// void pop_back(); // Removes the last element of the container
-		// iterator insert(const_iterator pos, const T& value);
+		// iterator insert(const_iterator pos, const T& value) {	}
 		// iterator insert(const_iterator pos, size_type count, const T& value);
 		// template<class InputIt>
 		// iterator insert(const_iterator pos, InputIt first, InputIt last);

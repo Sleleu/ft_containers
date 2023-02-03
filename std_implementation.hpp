@@ -6,7 +6,7 @@
 /*   By: sleleu <sleleu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/09 00:20:41 by sleleu            #+#    #+#             */
-/*   Updated: 2023/02/03 14:59:23 by sleleu           ###   ########.fr       */
+/*   Updated: 2023/02/03 18:33:11 by sleleu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ namespace ft
 	template <> struct is_integral<const long long> { const static bool value = true; };
 	template <> struct is_integral<unsigned long long> { const static bool value = true; };
 	template <> struct is_integral<const unsigned long long> { const static bool value = true; };
+	
 
 }
 
