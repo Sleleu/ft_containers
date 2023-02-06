@@ -6,7 +6,7 @@
 /*   By: sleleu <sleleu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 13:55:32 by sleleu            #+#    #+#             */
-/*   Updated: 2023/02/03 18:54:20 by sleleu           ###   ########.fr       */
+/*   Updated: 2023/02/06 09:44:47 by sleleu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,20 +115,26 @@ namespace ft
 		reverse_iterator operator+( difference_type n )                { return (reverse_iterator(current - n));  }
 		reverse_iterator operator-( difference_type n )                { return (reverse_iterator(current + n));  }
 		reference operator[]( difference_type n ) const                { return (current[-n-1]);                  }
-		pointer base() const /* getter  */                             { return this->current;                    }
-		reverse_iterator operator++(int) { // post incrementation
+		iterator_type base() const /* getter  */                       { return this->current;                    }
+		
+		
+		reverse_iterator operator++(int)
+		{ // post-increment version
 			reverse_iterator tmp = *this;
-			--current;
-			return (tmp);  }
-		reverse_iterator operator--(int) { // post decrementation
+			++(*this);
+			return (tmp);
+		}
+		reverse_iterator operator--(int)
+		{ // post-decrement version
 			reverse_iterator tmp = *this;
-			++current;
-			return (tmp);  }	
+			--(*this);
+			return (tmp); 
+		}	
 //-------------------------------------------------------------------------------------------------
 
 		protected:
 
-		Iterator current;
+		iterator_type current;
 		
 	}; // reverse_iterator
 
@@ -167,7 +173,7 @@ namespace ft
 			typedef typename iterator<random_access_iterator_tag, T>::pointer            pointer;
 			typedef typename iterator<random_access_iterator_tag, T>::reference          reference;
 
-		random_access_iterator() { this->ptr = NULL; };
+		random_access_iterator() { this->current = NULL; };
 		random_access_iterator(const random_access_iterator& src) { *this = src; }
 		random_access_iterator(const pointer src_ptr) { this->current = src_ptr; }
 		~random_access_iterator() {}
@@ -184,14 +190,14 @@ namespace ft
 		random_access_iterator operator+( difference_type n )    { return (random_access_iterator(current + n)); }
 		random_access_iterator operator-( difference_type n )    { return (random_access_iterator(current - n)); }
 		reference operator[]( difference_type n ) const          { return (current[-n-1]);                 }
-		pointer base() const /* getter  BUG HERE */              { return current;                         }
+		pointer base() const /* getter */                        { return current;                         }
 		random_access_iterator operator++(int) { // post incrementation
 			random_access_iterator tmp = *this;
-			++current;
+			++(*this);
 			return (tmp);  }
 		random_access_iterator operator--(int) { // post decrementation
 			random_access_iterator tmp = *this;
-			--current;
+			--(*this);
 			return (tmp);  }	
 //-------------------------------------------------------------------------------------------------
 		protected:

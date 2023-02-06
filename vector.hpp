@@ -6,7 +6,7 @@
 /*   By: sleleu <sleleu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 18:58:07 by sleleu            #+#    #+#             */
-/*   Updated: 2023/02/03 18:14:47 by sleleu           ###   ########.fr       */
+/*   Updated: 2023/02/06 09:46:53 by sleleu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,15 +69,15 @@ namespace ft
 
 		//-------------- ITERATORS -----------------------------------
 
-		iterator begin()              { return iterator(_vector); }
-		const_iterator begin() const  { return const_iterator(_vector); }
-		iterator end()                { return iterator(_vector + _size); }
-		const_iterator end() const    { return const_iterator(_vector + _size); }
+		iterator begin()              { return iterator(_vector - 1); }
+		const_iterator begin() const  { return const_iterator(_vector - 1); }
+		iterator end()                { return iterator(_vector + _size - 1); }
+		const_iterator end() const    { return const_iterator(_vector + _size - 1); }
 		
-		reverse_iterator rbegin()             { return reverse_iterator(_vector + _size - 1); }
-		const_reverse_iterator rbegin() const { return const_reverse_iterator(_vector + _size - 1); }
-		reverse_iterator rend()               { return reverse_iterator(_vector - 1); }
-		const_reverse_iterator rend() const   { return const_reverse_iterator(_vector - 1); }
+		reverse_iterator rbegin()             { return reverse_iterator(end()); }
+		const_reverse_iterator rbegin() const { return const_reverse_iterator(end()); }
+		reverse_iterator rend()               { return reverse_iterator(begin()); }
+		const_reverse_iterator rend() const   { return const_reverse_iterator(begin()); }
 
 		//------------------------------------------------------------
 
