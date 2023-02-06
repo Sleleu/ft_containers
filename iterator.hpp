@@ -6,7 +6,7 @@
 /*   By: sleleu <sleleu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 13:55:32 by sleleu            #+#    #+#             */
-/*   Updated: 2023/02/06 11:20:05 by sleleu           ###   ########.fr       */
+/*   Updated: 2023/02/06 11:29:28 by sleleu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,10 +153,10 @@ namespace ft
 		{ return (lhs.base() == rhs.base()); }
 		template <class first, class second>
 		bool operator< (const reverse_iterator<first>& lhs ,const reverse_iterator<second>& rhs)
-		{ return (lhs.base() <  rhs.base()); }
+		{ return (lhs.base() >  rhs.base()); }
 		template <class first, class second>
 		bool operator> (const reverse_iterator<first>& lhs ,const reverse_iterator<second>& rhs)
-		{ return (lhs.base() >  rhs.base()); }
+		{ return (lhs.base() <  rhs.base()); }
 		template <class first, class second>
 		bool operator!=(const reverse_iterator<first>& lhs ,const reverse_iterator<second>& rhs)
 		{ return (lhs.base() != rhs.base()); }
