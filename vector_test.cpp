@@ -6,7 +6,7 @@
 /*   By: sleleu <sleleu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/03 13:46:20 by sleleu            #+#    #+#             */
-/*   Updated: 2023/02/06 11:00:05 by sleleu           ###   ########.fr       */
+/*   Updated: 2023/02/06 12:45:36 by sleleu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include <iostream>
 #include <memory>
 #include "iterator.hpp"
+#include "colors.hpp"
 
 int main(void)
 {
@@ -42,16 +43,37 @@ int main(void)
 	std::cout << "empty function for empty vector : " << std_v2.empty() << std::endl;
 	std::cout << "empty function for not empty vector : " << std_vector.empty() << std::endl;
 
-	ft::vector<int>::reverse_iterator rit1 = ft_vector.rbegin();
-	ft::vector<int>::reverse_iterator rite1 = ft_vector.rend();
-	for (; rit1 < rite1; rit1++)
-		std::cout << "ft reverse_iterator test " << *rit1 << "\n";
+	std::cout << BOLDGREEN << "\nVECTOR REVERSE_ITERATOR : " << "\n";
 
-
+	std::cout << BOLDYELLOW << "STD TESTS" << "\n";
 	std::vector<int>::reverse_iterator rit2 = std_vector.rbegin();
 	std::vector<int>::reverse_iterator rite2 = std_vector.rend();
 	for (; rit2 < rite2; rit2++)
 		std::cout << "std reverse_iterator test " << *rit2 << "\n";
 
+	std::cout << BOLDCYAN << "FT TESTS" << "\n";
+	ft::vector<int>::reverse_iterator rit1 = ft_vector.rbegin();
+	ft::vector<int>::reverse_iterator rite1 = ft_vector.rend();
+	for (; rit1 < rite1; rit1++)
+		std::cout << "ft reverse_iterator test " << *rit1 << "\n";
+
+	std::cout << BOLDGREEN << "\nVECTOR RESERVE : " << "\n";
+	ft_vector.reserve(50); // new_cap > capacity
+	std_vector.reserve(50);
+	ft_vector.reserve(10); // new_cap < capacity 
+	std_vector.reserve(10);
+	std::cout << BOLDYELLOW << "STD TESTS" << "\n";
+	for (std_it = std_vector.begin(), std_ite = std_vector.end(); std_it < std_ite; std_it++)
+		std::cout << "std : " << *std_it << std::endl;
+	std::cout << "size : " << std_vector.size() << std::endl;
+	std::cout << "capacity : " << std_vector.capacity() << std::endl;
+
+	std::cout << BOLDCYAN << "FT TESTS" << "\n";
+	for (ft_it = ft_vector.begin(), ft_ite = ft_vector.end(); ft_it < ft_ite; ft_it++)
+		std::cout << "ft : " << *ft_it << std::endl;
+	std::cout << "size : " << ft_vector.size() << std::endl;
+	std::cout << "capacity : " << ft_vector.capacity() << std::endl;
+
+	std::cout << RESET;
 	return (0);
 }

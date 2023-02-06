@@ -6,7 +6,7 @@
 /*   By: sleleu <sleleu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 13:55:32 by sleleu            #+#    #+#             */
-/*   Updated: 2023/02/06 11:29:28 by sleleu           ###   ########.fr       */
+/*   Updated: 2023/02/06 11:35:02 by sleleu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,11 +88,11 @@ namespace ft
 
 	template <class Iterator>
 	class reverse_iterator :  public
-										iterator <typename iterator_traits<Iterator>::iterator_category,
-												  typename iterator_traits<Iterator>::value_type,
-												  typename iterator_traits<Iterator>::difference_type,
-												  typename iterator_traits<Iterator>::pointer,
-												  typename iterator_traits<Iterator>::reference >
+										iterator < typename iterator_traits<Iterator>::iterator_category,
+												   typename iterator_traits<Iterator>::value_type,
+												   typename iterator_traits<Iterator>::difference_type,
+												   typename iterator_traits<Iterator>::pointer,
+												   typename iterator_traits<Iterator>::reference >
 	{
 		public:
 

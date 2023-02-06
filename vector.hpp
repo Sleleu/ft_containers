@@ -6,7 +6,7 @@
 /*   By: sleleu <sleleu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 18:58:07 by sleleu            #+#    #+#             */
-/*   Updated: 2023/02/06 10:21:47 by sleleu           ###   ########.fr       */
+/*   Updated: 2023/02/06 14:36:07 by sleleu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,12 @@ namespace ft
 	//	template < class InputIt >
 	//	vector(InputIt first, InputIt last, const Allocator& alloc = Allocator()); // Constructs the container with the contents of the range (first,last)
 	//	vector(const vector& other); // Constructs the container with the copy of the contents of other
-		~vector() {} // Destructs the vector
+		~vector()
+		{
+			for (size_type i = 0; i < this->_size; i++)
+				this->_alloc.destroy(&_vector[i]);
+			this->_alloc.deallocate(this->_vector, this->capacity());
+		} // Destructs the vector
 //-------------------------------------------------------------------------------------------------
 
 
@@ -83,10 +88,36 @@ namespace ft
 
 		//-------------- CAPACITY -----------------------------------
 		bool empty() const { return _size == 0; }
-		size_type size() const { return (_size); }
-		size_type max_size() const { return std::numeric_limits<difference_type>::max(); } // FALSE VALUE
-		//void reserve(size_type new_cap);
+		size_type size() const { return (_size); }	
+		size_type max_size() const { return this->_alloc.max_size(); }
+		void reserve(size_type new_cap)
+		{
+			pointer new_vector = _alloc.allocate(new_cap);
+
+			if (new_cap > this->max_size())
+				throw (std::length_error("vector reserve error\n"));
+			if (new_cap > capacity())
+			{
+				for (size_type i = 0; i < this->_size; i++)
+					_alloc.construct(&new_vector[i], this->_vector[i]);
+				_alloc.deallocate(this->_vector, this->capacity());
+				this->_vector = new_vector;	
+				this->_capacity = new_cap;
+			}
+			else
+				return ;
+		}
 		size_type capacity() const { return (_capacity); }
+
+		void	resize(size_type size, type_value value = type_value())
+		{
+			if (size > this->size())
+				insert(this->end(), size - this->size(), value);
+			else if (size < this->size())
+				erase(this->begin() + size, this->end());
+			else
+				return ;
+		}
 		//-----------------------------------------------------------
 
 		//--------------- MODIFIERS ---------------------------------
@@ -95,8 +126,22 @@ namespace ft
 		{ 
 			this->insert(this->end(), val);
 		}
-		// void pop_back(); // Removes the last element of the container
-		// iterator insert(const_iterator pos, const T& value) {	}
+		void pop_back()
+		{ // Removes the last element of the container
+			this->erase(this->end(), val);
+		}
+		iterator insert(const_iterator pos, const T& value)
+		{
+			size_type index = pos - this->begin();
+			
+			this->_size++;
+			if (_size > _capacity)
+				this->reserve(_size * 2) // realloc si on depasse la capacite
+			for (size_type i = _size; i > index; i--)
+				_vector[i] = _vector[i - 1];
+			_vector[index] = value;
+			return (this->begin() + index);	// prevoir une capacite minimale pour eviter les reallocations ?
+		}
 		// iterator insert(const_iterator pos, size_type count, const T& value);
 		// template<class InputIt>
 		// iterator insert(const_iterator pos, InputIt first, InputIt last);
