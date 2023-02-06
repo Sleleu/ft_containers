@@ -6,7 +6,7 @@
 /*   By: sleleu <sleleu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 18:58:07 by sleleu            #+#    #+#             */
-/*   Updated: 2023/02/06 16:20:01 by sleleu           ###   ########.fr       */
+/*   Updated: 2023/02/06 21:34:02 by sleleu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ namespace ft
 
 		/* 1 | default | Constructs an empty container with the given allocator alloc */
 		explicit vector(const allocator_type& alloc = allocator_type())
-		: _alloc(alloc), _size(0), _capacity(0) {}
+		: _alloc(alloc), _size(0), _capacity(0) { _vector = _alloc.allocate(_capacity); }
 		/* 2 | fill | Constructs the container with count copies of elements with value */
 		explicit vector(size_type n, const value_type& value = value_type(), const allocator_type& alloc = allocator_type())
 		: _alloc(alloc), _size(n), _capacity(n)
@@ -60,9 +60,11 @@ namespace ft
 	//	vector(const vector& other); // Constructs the container with the copy of the contents of other
 		~vector()
 		{
-			//  for (size_type i = 0; i < this->_size; i++)
-			//  	this->_alloc.destroy(&_vector[i]);
-			//this->_alloc.deallocate(this->_vector, this->capacity()); // double free
+			if (_size > 0)
+			   for (size_type i = 0; i < this->_size; i++)
+				   	this->_alloc.destroy(&_vector[i]);
+			if (_capacity > 0)
+			 this->_alloc.deallocate(this->_vector, this->capacity());
 		} // Destructs the vector
 //-------------------------------------------------------------------------------------------------
 
@@ -71,6 +73,15 @@ namespace ft
 		
 		vector& operator=(const vector& other) { *this = other; return (*this); }
 		allocator_type get_allocator() const { return (Allocator(_alloc)); }
+
+		//-------------- ELEMENT ACCESS ------------------------------
+
+		reference front() { return (reference(*this->begin())); }
+		const_reference front() const { return (const_reference(*this->begin())); }
+		reference back() { return (reference(*--this->end())); }
+		const_reference back() const { return (const_reference(*--this->end())); }
+
+		//------------------------------------------------------------
 
 		//-------------- ITERATORS -----------------------------------
 
@@ -113,9 +124,14 @@ namespace ft
 
 		//--------------- MODIFIERS ---------------------------------
 		
-		void push_back(const value_type& val)
+		void push_back(const value_type& value)
 		{ 
-			this->insert(this->end(), val);
+			if (this->size() == 0)
+				reserve(10);
+			if (this->size() == this->capacity())
+					reserve(this->size() * 2);
+			_alloc.construct(&back() + 1, value);
+			_size++;
 		}
 		// void pop_back()
 		// { // Removes the last element of the container
@@ -125,7 +141,7 @@ namespace ft
 		{
 			size_type index = pos - this->begin();
 			
-			if (_size > _capacity)
+			if (_size == _capacity)
 				this->reserve(_size * 2); // realloc si on depasse la capacite
 			for (size_type i = _size; i > index; i--)
 				_vector[i] = _vector[i - 1];
@@ -168,13 +184,6 @@ namespace ft
 		//-----------------------------------------------------------
 		
 //-------------------------------------------------------------------------------------------------
-
-
-
-		// iterator begin()
-		// {
-		// 	return (this->_vector);
-		// }
 
 
 		private:

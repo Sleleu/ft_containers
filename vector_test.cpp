@@ -6,7 +6,7 @@
 /*   By: sleleu <sleleu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/03 13:46:20 by sleleu            #+#    #+#             */
-/*   Updated: 2023/02/06 16:57:10 by sleleu           ###   ########.fr       */
+/*   Updated: 2023/02/06 21:08:37 by sleleu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,13 +68,22 @@ int main(void)
 	std::cout << BOLDGREEN << "\nVECTOR PUSH_BACK | INSERT : " << "\n";
 	std_vector.push_back(42);
 	ft_vector.push_back(42);
+	ft_vector.insert(ft_vector.begin() + 3, 256);
+	std_vector.insert(std_vector.begin() + 3, 256);
 	print_vector(std_vector, ft_vector);
-
-	ft::vector<int>::iterator ft_it3 = ft_vector.begin();
-	ft::vector<int>::iterator ft_ite3 = ft_vector.end();
-	for (; ft_it3 < ft_ite3 + 1; ft_it3++)
-		std::cout << "ft : " << *ft_it3 << std::endl;
 	
+	std::cout << ft_vector.front() << " " << std_vector.front() << "\n";
+	std::cout << ft_vector.back() << " " << std_vector.back() << "\n";
+
+	ft::vector<int> myvec(5, 20);
+	ft::vector<int>::iterator iter = myvec.begin();
+	ft::vector<int>::iterator riter = myvec.end();
+	myvec.reserve(20);
+	myvec.push_back(1);
+	//myvec.push_back(2);
+	for (;iter < riter; iter++)
+		std::cout << "test " << *iter << "\n";	
+
 	std::cout << RESET;
 	return (0);
 }
