@@ -6,7 +6,7 @@
 /*   By: sleleu <sleleu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 13:55:32 by sleleu            #+#    #+#             */
-/*   Updated: 2023/02/06 09:44:47 by sleleu           ###   ########.fr       */
+/*   Updated: 2023/02/06 11:20:05 by sleleu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,12 @@ namespace ft
 		/*--------------------------*/
 
 	template <class Iterator>
-	class reverse_iterator
+	class reverse_iterator :  public
+										iterator <typename iterator_traits<Iterator>::iterator_category,
+												  typename iterator_traits<Iterator>::value_type,
+												  typename iterator_traits<Iterator>::difference_type,
+												  typename iterator_traits<Iterator>::pointer,
+												  typename iterator_traits<Iterator>::reference >
 	{
 		public:
 
@@ -98,43 +103,47 @@ namespace ft
 		typedef typename ft::iterator_traits<Iterator>::pointer           pointer;
 		typedef typename ft::iterator_traits<Iterator>::reference         reference;
 
-		reverse_iterator() { this->current = NULL; };
-		explicit reverse_iterator( iterator_type it ) { this->current = it; };
+		reverse_iterator() { this->_it = iterator_type(); };
+		explicit reverse_iterator( iterator_type it ) { this->_it = it; };
 		template< class Iter >
-		reverse_iterator( const reverse_iterator<Iter>& other ) { this->current = other.current; };
+		reverse_iterator( const reverse_iterator<Iter>& other ) { this->_it = other._it; };
 
 //-------------------------- MEMBER FUNCTIONS -----------------------------------------------------
 		template< class U >
-		reverse_iterator& operator=( const reverse_iterator<U>& other) { *this = other; return (*this);           }
-		reference operator*() const                                    { Iterator tmp = current; return (*--tmp); }	
+		reverse_iterator& operator=( const reverse_iterator<U>& other)
+		{ 
+			this->_it = other.base();
+			return (*this);           
+		}
+		reference operator*() const                                    { iterator_type tmp = _it; return (*--tmp); }	
 		pointer operator->() const                                     { return &(this->operator*());             }
-		reverse_iterator& operator++()                                 { --current; return (*this);               }
-		reverse_iterator& operator--()                                 { ++current; return (*this);               }
-		reverse_iterator& operator+=( difference_type n )              { current -= n; return (*this);            }
-		reverse_iterator& operator-=( difference_type n )              { current += n; return (*this);            }
-		reverse_iterator operator+( difference_type n )                { return (reverse_iterator(current - n));  }
-		reverse_iterator operator-( difference_type n )                { return (reverse_iterator(current + n));  }
-		reference operator[]( difference_type n ) const                { return (current[-n-1]);                  }
-		iterator_type base() const /* getter  */                       { return this->current;                    }
+		reverse_iterator& operator++()                                 { --_it; return (*this);               }
+		reverse_iterator& operator--()                                 { ++_it; return (*this);               }
+		reverse_iterator& operator+=( difference_type n )              { _it -= n; return (*this);            }
+		reverse_iterator& operator-=( difference_type n )              { _it += n; return (*this);            }
+		reverse_iterator operator+( difference_type n ) const          { return (reverse_iterator(_it - n));  }
+		reverse_iterator operator-( difference_type n ) const          { return (reverse_iterator(_it + n));  }
+		reference operator[]( difference_type n ) const                { return (_it[-n-1]);                  }
+		iterator_type base() const /* getter  */                       { return this->_it;                    }
 		
 		
 		reverse_iterator operator++(int)
 		{ // post-increment version
 			reverse_iterator tmp = *this;
-			++(*this);
+			--_it;
 			return (tmp);
 		}
 		reverse_iterator operator--(int)
 		{ // post-decrement version
 			reverse_iterator tmp = *this;
-			--(*this);
+			++_it;
 			return (tmp); 
 		}	
 //-------------------------------------------------------------------------------------------------
 
 		protected:
 
-		iterator_type current;
+		iterator_type _it;
 		
 	}; // reverse_iterator
 
@@ -156,7 +165,16 @@ namespace ft
 		{ return (lhs.base() <= rhs.base()); }
 		template <class first, class second>
 		bool operator>=(const reverse_iterator<first>& lhs ,const reverse_iterator<second>& rhs)
-		{ return (lhs.base() >= rhs.base()); }	
+		{ return (lhs.base() >= rhs.base()); }
+
+		template <class Iterator>
+		typename reverse_iterator<Iterator>::difference_type operator-(const reverse_iterator<Iterator>& x,
+		const reverse_iterator<Iterator>& y) { return y._it - x._it; }
+
+		template <class Iterator>
+		reverse_iterator<Iterator> operator+(typename reverse_iterator<Iterator>::difference_type n,
+		const reverse_iterator<Iterator>& x) { return reverse_iterator<Iterator> (x._it - n); }
+		
 //-------------------------------------------------------------------------------------------------
 
 		/*----------------------------*/
@@ -164,7 +182,7 @@ namespace ft
 		/*----------------------------*/
 
 	template <typename T>
-	class random_access_iterator
+	class random_access_iterator : public iterator<random_access_iterator_tag, T>
 	{
 		public:
 			typedef typename iterator<random_access_iterator_tag, T>::iterator_category  iterator_category;
@@ -174,14 +192,18 @@ namespace ft
 			typedef typename iterator<random_access_iterator_tag, T>::reference          reference;
 
 		random_access_iterator() { this->current = NULL; };
-		random_access_iterator(const random_access_iterator& src) { *this = src; }
+		random_access_iterator(const random_access_iterator& src) { this->current = src.current; }
 		random_access_iterator(const pointer src_ptr) { this->current = src_ptr; }
 		~random_access_iterator() {}
 
 //-------------------------- MEMBER FUNCTIONS -----------------------------------------------------
 		template< class U >
-		random_access_iterator& operator=( const random_access_iterator<U>& other) { *this = other; return (*this); }
-		reference operator*() const                              { pointer tmp = current; return (*++tmp); }	
+		random_access_iterator& operator=( const random_access_iterator<U>& other)
+		{
+			this->current = other.current;
+			return (*this);
+		}
+		reference operator*() const                              { return (*this->current); }	
 		pointer operator->() const                               { return &(this->operator*());            }
 		random_access_iterator& operator++()                     { ++current; return (*this);              }
 		random_access_iterator& operator--()                     { --current; return (*this);              }
@@ -189,15 +211,15 @@ namespace ft
 		random_access_iterator& operator-=( difference_type n )  { current -= n; return (*this);           }
 		random_access_iterator operator+( difference_type n )    { return (random_access_iterator(current + n)); }
 		random_access_iterator operator-( difference_type n )    { return (random_access_iterator(current - n)); }
-		reference operator[]( difference_type n ) const          { return (current[-n-1]);                 }
+		reference operator[]( difference_type n ) const          { return (current[n]);                 }
 		pointer base() const /* getter */                        { return current;                         }
 		random_access_iterator operator++(int) { // post incrementation
 			random_access_iterator tmp = *this;
-			++(*this);
+			++current;
 			return (tmp);  }
 		random_access_iterator operator--(int) { // post decrementation
 			random_access_iterator tmp = *this;
-			--(*this);
+			--current;
 			return (tmp);  }	
 //-------------------------------------------------------------------------------------------------
 		protected:

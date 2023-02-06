@@ -6,7 +6,7 @@
 /*   By: sleleu <sleleu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 18:58:07 by sleleu            #+#    #+#             */
-/*   Updated: 2023/02/06 09:46:53 by sleleu           ###   ########.fr       */
+/*   Updated: 2023/02/06 10:21:47 by sleleu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,10 +69,10 @@ namespace ft
 
 		//-------------- ITERATORS -----------------------------------
 
-		iterator begin()              { return iterator(_vector - 1); }
-		const_iterator begin() const  { return const_iterator(_vector - 1); }
-		iterator end()                { return iterator(_vector + _size - 1); }
-		const_iterator end() const    { return const_iterator(_vector + _size - 1); }
+		iterator begin()              { return iterator(_vector); }
+		const_iterator begin() const  { return const_iterator(_vector); }
+		iterator end()                { return iterator(_vector + _size); }
+		const_iterator end() const    { return const_iterator(_vector + _size); }
 		
 		reverse_iterator rbegin()             { return reverse_iterator(end()); }
 		const_reverse_iterator rbegin() const { return const_reverse_iterator(end()); }
