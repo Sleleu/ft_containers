@@ -6,7 +6,7 @@
 /*   By: sleleu <sleleu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 13:55:32 by sleleu            #+#    #+#             */
-/*   Updated: 2023/02/06 11:35:02 by sleleu           ###   ########.fr       */
+/*   Updated: 2023/02/06 16:39:10 by sleleu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -245,6 +245,17 @@ namespace ft
 	template <class first, class second>
 	bool operator>=(const random_access_iterator<first>& lhs, const random_access_iterator<second>& rhs)
 	{ return (lhs.base() >= rhs.base()); }
+
+	template <class Iterator>
+	typename random_access_iterator<Iterator>::difference_type operator-(const random_access_iterator<Iterator>& x,
+	const random_access_iterator<Iterator>& y)
+	{ return x.base() - y.base(); }
+
+	template <class Iterator>
+	random_access_iterator<Iterator> operator+(typename random_access_iterator<Iterator>::difference_type n,
+	const random_access_iterator<Iterator>& x)
+	{ return random_access_iterator<Iterator> (x.base() + n); }
+		
 //-------------------------------------------------------------------------------------------------
 
 } // namespace

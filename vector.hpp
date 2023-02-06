@@ -6,7 +6,7 @@
 /*   By: sleleu <sleleu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 18:58:07 by sleleu            #+#    #+#             */
-/*   Updated: 2023/02/06 14:36:07 by sleleu           ###   ########.fr       */
+/*   Updated: 2023/02/06 16:20:01 by sleleu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,9 +60,9 @@ namespace ft
 	//	vector(const vector& other); // Constructs the container with the copy of the contents of other
 		~vector()
 		{
-			for (size_type i = 0; i < this->_size; i++)
-				this->_alloc.destroy(&_vector[i]);
-			this->_alloc.deallocate(this->_vector, this->capacity());
+			//  for (size_type i = 0; i < this->_size; i++)
+			//  	this->_alloc.destroy(&_vector[i]);
+			//this->_alloc.deallocate(this->_vector, this->capacity()); // double free
 		} // Destructs the vector
 //-------------------------------------------------------------------------------------------------
 
@@ -109,15 +109,6 @@ namespace ft
 		}
 		size_type capacity() const { return (_capacity); }
 
-		void	resize(size_type size, type_value value = type_value())
-		{
-			if (size > this->size())
-				insert(this->end(), size - this->size(), value);
-			else if (size < this->size())
-				erase(this->begin() + size, this->end());
-			else
-				return ;
-		}
 		//-----------------------------------------------------------
 
 		//--------------- MODIFIERS ---------------------------------
@@ -126,31 +117,52 @@ namespace ft
 		{ 
 			this->insert(this->end(), val);
 		}
-		void pop_back()
-		{ // Removes the last element of the container
-			this->erase(this->end(), val);
-		}
-		iterator insert(const_iterator pos, const T& value)
+		// void pop_back()
+		// { // Removes the last element of the container
+		// 	this->erase(this->end());
+		// }
+		iterator insert(iterator pos, const T& value)
 		{
 			size_type index = pos - this->begin();
 			
-			this->_size++;
 			if (_size > _capacity)
-				this->reserve(_size * 2) // realloc si on depasse la capacite
+				this->reserve(_size * 2); // realloc si on depasse la capacite
 			for (size_type i = _size; i > index; i--)
 				_vector[i] = _vector[i - 1];
 			_vector[index] = value;
+			this->_size++;
 			return (this->begin() + index);	// prevoir une capacite minimale pour eviter les reallocations ?
 		}
+
 		// iterator insert(const_iterator pos, size_type count, const T& value);
 		// template<class InputIt>
 		// iterator insert(const_iterator pos, InputIt first, InputIt last);
 		// iterator erase(iterator pos); // Removes the elements at pos
 		// iterator erase(iterator first, iterator last); // Removes the elements in the range (first, last)
+
 		// template <class InputIterator>
 		// void assign(InputIterator first, InputIterator last);
 		// void assign(size_type n, const T& u);
 		// void clear();
+
+		/*
+					RESIZE()
+			Resizes the container to contain count elements.
+			If the current size is greater than count, the container is reduced to its first count elements.
+			If the current size is less than count,
+			1) additional default-inserted elements are appended
+			2) additional copies of value are appended.
+		*/
+		void	resize(size_type count, value_type value = value_type())
+		{
+			if (count > this->size())
+				insert(this->end(), count - this->size(), value);
+			else if (count < this->size())
+				erase(this->begin() + count, this->end());
+			else
+				return ;
+		}
+
 		// void swap(vector& other);
 		
 		//-----------------------------------------------------------
