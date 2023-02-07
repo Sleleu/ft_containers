@@ -6,7 +6,7 @@
 /*   By: sleleu <sleleu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 18:58:07 by sleleu            #+#    #+#             */
-/*   Updated: 2023/02/07 16:10:03 by sleleu           ###   ########.fr       */
+/*   Updated: 2023/02/07 16:40:44 by sleleu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,9 +162,9 @@ namespace ft
 		
 		void push_back(const value_type& value)
 		{ 
-			if (this->size() == 0)
-				reserve(10);
-			if (this->size() == this->capacity())
+			if (this->capacity() == 0)
+				reserve(1);
+			else if (this->size() == this->capacity())
 					reserve(this->size() * 2);
 			_alloc.construct(&back() + 1, value);
 			_size++;
