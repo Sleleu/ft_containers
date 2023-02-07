@@ -6,7 +6,7 @@
 /*   By: sleleu <sleleu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 18:58:07 by sleleu            #+#    #+#             */
-/*   Updated: 2023/02/07 16:40:44 by sleleu           ###   ########.fr       */
+/*   Updated: 2023/02/07 20:36:51 by sleleu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ namespace ft
 		/* 1 | default | Constructs an empty container with the given allocator alloc */
 		explicit vector(const allocator_type& alloc = allocator_type())
 		: _alloc(alloc), _size(0), _capacity(0) { _vector = _alloc.allocate(_capacity); }
+		
 		/* 2 | fill | Constructs the container with count copies of elements with value */
 		explicit vector(size_type n, const value_type& value = value_type(), const allocator_type& alloc = allocator_type())
 		: _alloc(alloc), _size(n), _capacity(n)
@@ -57,7 +58,7 @@ namespace ft
 
 		/* 3 | range | Constructs the container with the contents of the range (first,last) */
 		template < class InputIt >
-		vector(InputIt first, InputIt last, const Allocator& alloc = Allocator()) : _alloc(alloc)
+		vector(InputIt first, InputIt last, const Allocator& alloc = Allocator(), typename ft::enable_if<!ft::is_integral<InputIt>::value >::type* = 0) : _alloc(alloc)
 		{
 			size_type n = 0;
 			InputIt ptr = first;
@@ -69,15 +70,16 @@ namespace ft
 			for (size_type i = 0; i < n; i++, first++)
 				_alloc.construct(&_vector[i], *first);		
 		}
+		
 		/* 4 | copy | Constructs the container with the copy of the contents of other */
-		// vector(const vector& other) : _alloc(other._alloc), _size(other._size) ,_capacity(other._capacity)
-		// {
-		// 	vector::const_iterator it = other.begin(); // check pourquoi const_iterator fonctionne et pas iterator
+		vector(const vector& other) : _alloc(other._alloc), _size(other._size) ,_capacity(other._capacity)
+		{
+			vector::const_iterator it = other.begin();
 
-		// 	_vector = _alloc.allocate(_capacity);
-		// 	for (size_type i = 0; it < other.end(); i++, it++)
-		// 		_alloc.construct(&_vector[i], *it);
-		// }
+			_vector = _alloc.allocate(_capacity);
+			for (size_type i = 0; it < other.end(); i++, it++)
+				_alloc.construct(&_vector[i], *it);
+		}
 		~vector()
 		{
 			if (_size > 0)
@@ -91,7 +93,12 @@ namespace ft
 
 //--------------------------- MEMBER FUNCTIONS ----------------------------------------------------
 		
-		vector& operator=(const vector& other) { *this = other; return (*this); }
+		vector& operator=(const vector& other)
+		{
+			if (*this != other)
+				*this = other;
+			return (*this);
+		}
 		allocator_type get_allocator() const { return (Allocator(_alloc)); }
 
 		//-------------- ELEMENT ACCESS ------------------------------
@@ -134,7 +141,12 @@ namespace ft
 		//------------------------------------------------------------
 
 		//-------------- CAPACITY -----------------------------------
-		bool empty() const { return _size == 0; }
+		bool empty() const
+		{
+			if (_size == 0)
+				return (true);
+			return (false);
+		}
 		size_type size() const { return (_size); }	
 		size_type max_size() const { return this->_alloc.max_size(); }
 		void reserve(size_type new_cap)
@@ -193,14 +205,27 @@ namespace ft
 		// iterator erase(iterator pos); // Removes the elements at pos
 		// iterator erase(iterator first, iterator last); // Removes the elements in the range (first, last)
 
-		//template <class InputIterator>
-		// void assign(InputIterator first, InputIterator last)
-		// {
-		// 	// this->clear();
-		// 	// for (; first < last; first++) // segfault
-		// 	// 	this->push_back(*first);		
-		// }
-		// void assign(size_type n, const T& u);
+		/*
+					ASSIGN()
+		    Replaces the contents of the container.
+
+			1) Replaces the contents with count copies of value value
+			2) Replaces the contents with copies of those in the range [first, last).
+			The function template argument InputIterator shall be an input iterator type that points to elements
+			of a type from which value_type objects can be constructed.
+		*/
+		template <class InputIterator>
+		void assign(InputIterator first, InputIterator last, typename enable_if<!is_integral<InputIterator>::value>::type* = 0)
+		{
+			this->clear();
+			for (; first < last; first++) // segfault
+				this->push_back(*first);		
+		}
+		void assign(size_type n, const T& u)
+		{
+			for (; n > 0; n--)
+				this->push_back(u);
+		}
 
 		/*
 				CLEAR
@@ -234,7 +259,32 @@ namespace ft
 				return ;
 		}
 
-		// void swap(vector& other);
+		/*
+					SWAP()
+			Exchanges the content of the container by the content of x, which is another vector object of the
+			same type. Sizes may differ.
+		
+			After the call to this member function, the elements in this container are those which were in x before
+			the call, and the elements of x are those which were in this. All iterators, references and pointers
+			remain valid for the swapped objects.
+		*/
+		void swap(vector& other)
+		{
+			pointer vector_tmp       = this->_vector;
+			allocator_type alloc_tmp = this->_alloc;
+			size_type size_tmp       = this->_size;
+			size_type capacity_tmp   = this->_capacity;
+			
+			this->_vector            = other._vector;
+			this->_alloc             = other._alloc;
+			this->_size              = other._size;
+			this->_capacity          = other._capacity;
+
+			other._vector            = vector_tmp;
+			other._alloc             = alloc_tmp;
+			other._size              = size_tmp;
+			other._capacity          = capacity_tmp;
+		}
 		
 		//-----------------------------------------------------------
 		

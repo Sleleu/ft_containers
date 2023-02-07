@@ -6,7 +6,7 @@
 /*   By: sleleu <sleleu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 13:55:32 by sleleu            #+#    #+#             */
-/*   Updated: 2023/02/06 16:39:10 by sleleu           ###   ########.fr       */
+/*   Updated: 2023/02/07 20:52:53 by sleleu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ namespace ft
 		typedef	T	value_type;
 		typedef	T*	pointer;
 		typedef	T&	reference;
-		typedef	typename	std::random_access_iterator_tag	iterator_category;
+		typedef	random_access_iterator_tag	iterator_category;
 	};
 
 	template <class T>
@@ -58,7 +58,7 @@ namespace ft
 		typedef	T	value_type;
 		typedef	const T*	pointer;
 		typedef	const T&	reference;
-		typedef std::random_access_iterator_tag	iterator_category;
+		typedef random_access_iterator_tag	iterator_category;
 	};
 
 		/*--------------------------*/
@@ -192,7 +192,7 @@ namespace ft
 			typedef typename iterator<random_access_iterator_tag, T>::reference          reference;
 
 		random_access_iterator() { this->current = NULL; };
-		random_access_iterator(const random_access_iterator& src) { this->current = src.current; }
+		random_access_iterator(const random_access_iterator& src) { this->current = src.current; } // PB ICI ITERATOR SWAP
 		random_access_iterator(const pointer src_ptr) { this->current = src_ptr; }
 		~random_access_iterator() {}
 
@@ -200,7 +200,8 @@ namespace ft
 		template< class U >
 		random_access_iterator& operator=( const random_access_iterator<U>& other)
 		{
-			this->current = other.current;
+			if (*this != other)
+				this->current = other.current;
 			return (*this);
 		}
 		reference operator*() const                              { return (*this->current); }	
@@ -220,7 +221,10 @@ namespace ft
 		random_access_iterator operator--(int) { // post decrementation
 			random_access_iterator tmp = *this;
 			--current;
-			return (tmp);  }	
+			return (tmp);  }
+		operator random_access_iterator<const value_type>() const {
+			return (random_access_iterator<const value_type>(this->current));
+		}
 //-------------------------------------------------------------------------------------------------
 		protected:
 			pointer current;
