@@ -6,7 +6,7 @@
 /*   By: sleleu <sleleu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 18:58:07 by sleleu            #+#    #+#             */
-/*   Updated: 2023/02/06 21:34:02 by sleleu           ###   ########.fr       */
+/*   Updated: 2023/02/07 16:10:03 by sleleu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,9 +55,29 @@ namespace ft
 				_alloc.construct(&_vector[i] , value); // Constructs an element object on the location pointed by ptr
 		} 
 
-	//	template < class InputIt >
-	//	vector(InputIt first, InputIt last, const Allocator& alloc = Allocator()); // Constructs the container with the contents of the range (first,last)
-	//	vector(const vector& other); // Constructs the container with the copy of the contents of other
+		/* 3 | range | Constructs the container with the contents of the range (first,last) */
+		template < class InputIt >
+		vector(InputIt first, InputIt last, const Allocator& alloc = Allocator()) : _alloc(alloc)
+		{
+			size_type n = 0;
+			InputIt ptr = first;
+			
+			for (; ptr < last; ptr++, n++);
+			_size = n;
+			_capacity = n;
+			_vector = _alloc.allocate(n);
+			for (size_type i = 0; i < n; i++, first++)
+				_alloc.construct(&_vector[i], *first);		
+		}
+		/* 4 | copy | Constructs the container with the copy of the contents of other */
+		// vector(const vector& other) : _alloc(other._alloc), _size(other._size) ,_capacity(other._capacity)
+		// {
+		// 	vector::const_iterator it = other.begin(); // check pourquoi const_iterator fonctionne et pas iterator
+
+		// 	_vector = _alloc.allocate(_capacity);
+		// 	for (size_type i = 0; it < other.end(); i++, it++)
+		// 		_alloc.construct(&_vector[i], *it);
+		// }
 		~vector()
 		{
 			if (_size > 0)
@@ -76,10 +96,26 @@ namespace ft
 
 		//-------------- ELEMENT ACCESS ------------------------------
 
-		reference front() { return (reference(*this->begin())); }
-		const_reference front() const { return (const_reference(*this->begin())); }
-		reference back() { return (reference(*--this->end())); }
-		const_reference back() const { return (const_reference(*--this->end())); }
+		reference operator[](size_type pos)             { return (_vector[pos]);                    }
+		const_reference operator[](size_type pos) const { return (_vector[pos]);                    }
+		reference front()                               { return (reference(*this->begin()));       }
+		const_reference front() const                   { return (const_reference(*this->begin())); }
+		reference back()                                { return (reference(*--this->end()));       }
+		const_reference back() const                    { return (const_reference(*--this->end())); }
+		reference at(size_type pos)						
+		{
+			if (!(pos < size()))
+				throw (std::out_of_range("vector at() error\n"));
+			else
+				return (_vector[pos]);		
+		}
+		const_reference at(size_type pos) const
+		{
+			if (!(pos < size()))
+				throw (std::out_of_range("vector at() error\n"));
+			else
+				return (_vector[pos]);	
+		}
 
 		//------------------------------------------------------------
 
@@ -106,7 +142,7 @@ namespace ft
 			pointer new_vector = _alloc.allocate(new_cap);
 
 			if (new_cap > this->max_size())
-				throw (std::length_error("vector reserve error\n"));
+				throw (std::length_error("vector reserve() error\n"));
 			if (new_cap > capacity())
 			{
 				for (size_type i = 0; i < this->_size; i++)
@@ -133,6 +169,7 @@ namespace ft
 			_alloc.construct(&back() + 1, value);
 			_size++;
 		}
+		
 		// void pop_back()
 		// { // Removes the last element of the container
 		// 	this->erase(this->end());
@@ -156,10 +193,28 @@ namespace ft
 		// iterator erase(iterator pos); // Removes the elements at pos
 		// iterator erase(iterator first, iterator last); // Removes the elements in the range (first, last)
 
-		// template <class InputIterator>
-		// void assign(InputIterator first, InputIterator last);
+		//template <class InputIterator>
+		// void assign(InputIterator first, InputIterator last)
+		// {
+		// 	// this->clear();
+		// 	// for (; first < last; first++) // segfault
+		// 	// 	this->push_back(*first);		
+		// }
 		// void assign(size_type n, const T& u);
-		// void clear();
+
+		/*
+				CLEAR
+			Removes all elements from the vector (which are destroyed), leaving the container with a size of 0.
+		*/
+		void clear()
+		{
+			if (_size > 0)
+			{
+			   for (size_type i = 0; i < this->_size; i++)
+				   	this->_alloc.destroy(&_vector[i]);
+				_size = 0;
+			}
+		}
 
 		/*
 					RESIZE()
