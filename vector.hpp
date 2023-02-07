@@ -6,7 +6,7 @@
 /*   By: sleleu <sleleu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 18:58:07 by sleleu            #+#    #+#             */
-/*   Updated: 2023/02/07 20:36:51 by sleleu           ###   ########.fr       */
+/*   Updated: 2023/02/07 22:48:21 by sleleu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,17 +86,26 @@ namespace ft
 			   for (size_type i = 0; i < this->_size; i++)
 				   	this->_alloc.destroy(&_vector[i]);
 			if (_capacity > 0)
-			 this->_alloc.deallocate(this->_vector, this->capacity());
+				this->_alloc.deallocate(this->_vector, this->capacity());
 		} // Destructs the vector
 //-------------------------------------------------------------------------------------------------
 
 
 //--------------------------- MEMBER FUNCTIONS ----------------------------------------------------
 		
+		template <class InputIt> //LEAK A FIX ICI
 		vector& operator=(const vector& other)
 		{
-			if (*this != other)
-				*this = other;
+			InputIt it = other.begin();
+			InputIt ite = other.end();
+			if (this != &other)
+			{
+				this->reserve(other.size());
+				for (size_type i = 0; it < ite; it++, i++)
+				{
+					_alloc.construct(&_vector[i], *it);
+				}
+			}
 			return (*this);
 		}
 		allocator_type get_allocator() const { return (Allocator(_alloc)); }
@@ -155,7 +164,7 @@ namespace ft
 
 			if (new_cap > this->max_size())
 				throw (std::length_error("vector reserve() error\n"));
-			if (new_cap > capacity())
+			if (new_cap > this->capacity())
 			{
 				for (size_type i = 0; i < this->_size; i++)
 					_alloc.construct(&new_vector[i], this->_vector[i]);
@@ -218,11 +227,12 @@ namespace ft
 		void assign(InputIterator first, InputIterator last, typename enable_if<!is_integral<InputIterator>::value>::type* = 0)
 		{
 			this->clear();
-			for (; first < last; first++) // segfault
+			for (; first < last; first++)
 				this->push_back(*first);		
 		}
 		void assign(size_type n, const T& u)
 		{
+			this->clear();
 			for (; n > 0; n--)
 				this->push_back(u);
 		}
