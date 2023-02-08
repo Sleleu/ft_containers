@@ -6,7 +6,7 @@
 /*   By: sleleu <sleleu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 18:58:07 by sleleu            #+#    #+#             */
-/*   Updated: 2023/02/08 18:43:42 by sleleu           ###   ########.fr       */
+/*   Updated: 2023/02/08 19:13:22 by sleleu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -206,10 +206,10 @@ namespace ft
 			_size++;
 		}
 		
-		// void pop_back()
-		// { // Removes the last element of the container
-		// 	this->erase(this->end());
-		// }
+		void pop_back() // Removes the last element of the container
+		{
+			this->erase(this->end() - 1);
+		}
 
 		/*
 					INSERT()
@@ -297,33 +297,30 @@ namespace ft
 
 			if (pos == this->end()) // If pos refers to the last element, then the end() iterator is returned
 				return (this->end());
-
 			for (size_type i = 0 ; begin() + i < this->end(); i++)
 				if (begin() + i >= pos) // on deplace vers la gauche quand i arrive a pos
 					_vector[i] = _vector[i + 1];
 			this->_size--;
 			return (this->begin() + index);
-
-			// size_type index = pos - this->begin(); // -------------- V1
-			// //iterator it = this->begin();
-			// size_type i = 0;
-
-			// if (pos == this->end()) // If pos refers to the last element, then the end() iterator is returned
-			// 	return (this->end());
-
-			// for (; this->begin() + i < pos; i++); // i prends l'index a pos
-			// //i++;
-			// for (; i < _size; ++i)
-			// 	_vector[i - 1] = _vector[i];
-			// this->_size--;
-			// return (this->begin() + index);
 		}
 		// 2 | Removes the elements in the range (first, last)
-		// iterator erase(iterator first, iterator last)
-		// {
-		// 	if (first == last) // If [first, last) is an empty range, then last is returned
-		// 		return (last);
-		// }
+		iterator erase(iterator first, iterator last)
+		{
+			size_type remove_dist = 0;
+			size_type i = 0;
+			size_type index;
+
+			if (first == last) // If [first, last) is an empty range, then last is returned
+				return (last);
+
+			for (; begin() + i < first; i++); // placer i sur position du first
+			index = i; // emplacement du erase	
+			for (; first + remove_dist < last; remove_dist++); // calculer l'ecart de distance a remove
+			for (; first + i < this->end(); i++)
+				_vector[i] = _vector[i + remove_dist]; // deplacement vers la gauche en prenant en compte l'ecart a retirer
+			this->_size -= remove_dist;
+			return (this->begin() + index);
+		}
 
 		/*
 					ASSIGN()
