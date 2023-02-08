@@ -6,7 +6,7 @@
 /*   By: sleleu <sleleu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 18:58:07 by sleleu            #+#    #+#             */
-/*   Updated: 2023/02/07 22:48:21 by sleleu           ###   ########.fr       */
+/*   Updated: 2023/02/08 13:51:28 by sleleu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,27 +85,30 @@ namespace ft
 			if (_size > 0)
 			   for (size_type i = 0; i < this->_size; i++)
 				   	this->_alloc.destroy(&_vector[i]);
-			if (_capacity > 0)
+			//if (_capacity > 0) // to fix leak on operator=
 				this->_alloc.deallocate(this->_vector, this->capacity());
 		} // Destructs the vector
 //-------------------------------------------------------------------------------------------------
 
 
 //--------------------------- MEMBER FUNCTIONS ----------------------------------------------------
-		
-		template <class InputIt> //LEAK A FIX ICI
+
+
+		/*
+				OPERATOR=()
+			Assigns new contents to the container, replacing its current contents,
+			and modifying its size accordingly.
+			
+			Copies all the elements from x into the container.
+			The container preserves its current allocator, which is used to allocate storage in
+			case of reallocation.
+			Any elements held in the container before the call are either assigned to or destroyed.
+		*/
 		vector& operator=(const vector& other)
 		{
-			InputIt it = other.begin();
-			InputIt ite = other.end();
-			if (this != &other)
-			{
-				this->reserve(other.size());
-				for (size_type i = 0; it < ite; it++, i++)
-				{
-					_alloc.construct(&_vector[i], *it);
-				}
-			}
+			if (this == &other)
+				return (*this);
+			assign(other.begin(), other.end());
 			return (*this);
 		}
 		allocator_type get_allocator() const { return (Allocator(_alloc)); }
@@ -158,14 +161,26 @@ namespace ft
 		}
 		size_type size() const { return (_size); }	
 		size_type max_size() const { return this->_alloc.max_size(); }
+
+		/*
+					RESERVE()
+			Requests that the vector capacity be at least enough to contain n elements.
+
+			If n is greater than the current vector capacity, the function causes the container to reallocate
+			its storage increasing its capacity to n (or greater).
+			In all other cases, the function call does not cause a reallocation and the vector capacity is not affected.
+
+			This function has no effect on the vector size and cannot alter its elements.
+		*/
 		void reserve(size_type new_cap)
 		{
-			pointer new_vector = _alloc.allocate(new_cap);
-
 			if (new_cap > this->max_size())
 				throw (std::length_error("vector reserve() error\n"));
-			if (new_cap > this->capacity())
+			else if (new_cap > this->capacity())
 			{
+				pointer new_vector;
+			
+				new_vector = _alloc.allocate(new_cap);
 				for (size_type i = 0; i < this->_size; i++)
 					_alloc.construct(&new_vector[i], this->_vector[i]);
 				_alloc.deallocate(this->_vector, this->capacity());
@@ -195,6 +210,15 @@ namespace ft
 		// { // Removes the last element of the container
 		// 	this->erase(this->end());
 		// }
+
+		/*
+					INSERT()
+		The vector is extended by inserting new elements before the element at the specified position,
+		effectively increasing the container size by the number of elements inserted.
+
+		This causes an automatic reallocation of the allocated storage space if -and only if- the new vector size
+		surpasses the current vector capacity.
+		*/
 		iterator insert(iterator pos, const T& value)
 		{
 			size_type index = pos - this->begin();
@@ -208,7 +232,10 @@ namespace ft
 			return (this->begin() + index);	// prevoir une capacite minimale pour eviter les reallocations ?
 		}
 
-		// iterator insert(const_iterator pos, size_type count, const T& value);
+		iterator insert(const_iterator pos, size_type count, const T& value)
+		{
+			
+		}
 		// template<class InputIt>
 		// iterator insert(const_iterator pos, InputIt first, InputIt last);
 		// iterator erase(iterator pos); // Removes the elements at pos
@@ -238,7 +265,7 @@ namespace ft
 		}
 
 		/*
-				CLEAR
+				CLEAR()
 			Removes all elements from the vector (which are destroyed), leaving the container with a size of 0.
 		*/
 		void clear()
@@ -313,17 +340,23 @@ namespace ft
 //--------------------------- NON-MEMBER FUNCTIONS ------------------------------------------------
 		template <class Allocator> class vector< bool, Allocator>;
 		template <class T, class Allocator>
-		bool operator==(const vector<T, Allocator>& lhs, const vector<T, Allocator>& rhs)	{ return (lhs == rhs); }
+		bool operator==(const vector<T, Allocator>& lhs, const vector<T, Allocator>& rhs)	{ return (&lhs == &rhs); }
 		template <class T, class Allocator>
-		bool operator< (const vector<T, Allocator>& lhs, const vector<T, Allocator>& rhs)	{ return (lhs <  rhs); }
+		bool operator< (const vector<T, Allocator>& lhs, const vector<T, Allocator>& rhs)	{ return (&lhs >  &rhs); }
 		template <class T, class Allocator>
-		bool operator> (const vector<T, Allocator>& lhs, const vector<T, Allocator>& rhs)	{ return (lhs >  rhs); }
+		bool operator> (const vector<T, Allocator>& lhs, const vector<T, Allocator>& rhs)	{ return (&lhs <  &rhs); }
 		template <class T, class Allocator>
-		bool operator!=(const vector<T, Allocator>& lhs, const vector<T, Allocator>& rhs)	{ return (lhs != rhs); }
+		bool operator!=(const vector<T, Allocator>& lhs, const vector<T, Allocator>& rhs)	{ return (&lhs != &rhs); }
 		template <class T, class Allocator>
-		bool operator<=(const vector<T, Allocator>& lhs, const vector<T, Allocator>& rhs)	{ return (lhs <= rhs); }
+		bool operator<=(const vector<T, Allocator>& lhs, const vector<T, Allocator>& rhs)	{ return (&lhs >= &rhs); }
 		template <class T, class Allocator>
-		bool operator>=(const vector<T, Allocator>& lhs, const vector<T, Allocator>& rhs)	{ return (lhs >= rhs); }
+		bool operator>=(const vector<T, Allocator>& lhs, const vector<T, Allocator>& rhs)	{ return (&lhs <= &rhs); }
+
+		template <class T, class Allocator>
+		void	swap(vector<T, Allocator>& lhs, vector<T, Allocator>& rhs)
+		{
+			lhs.swap(rhs);
+		}
 //-------------------------------------------------------------------------------------------------
 
 } // namespace
