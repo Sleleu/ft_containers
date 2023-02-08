@@ -6,7 +6,7 @@
 /*   By: sleleu <sleleu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 18:58:07 by sleleu            #+#    #+#             */
-/*   Updated: 2023/02/08 17:28:53 by sleleu           ###   ########.fr       */
+/*   Updated: 2023/02/08 18:43:42 by sleleu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -276,13 +276,54 @@ namespace ft
 			size_type index = pos - this->begin();
 
 			last--;
-			for (; first - 1< last; last--)
+			for (; first - 1 < last; last--)
 				pos = this->insert(pos, *last);
 			return (this->begin() + index);	
 
 		}
-		// iterator erase(iterator pos); // Removes the elements at pos
-		// iterator erase(iterator first, iterator last); // Removes the elements in the range (first, last)
+
+		/*
+					ERASE()
+			Removes from the vector either a single element (position) or a range
+			of elements ([first,last)).
+			This effectively reduces the container size by the number of elements removed,
+			which are destroyed.
+			return value = Iterator following the last removed element.
+		*/
+		// 1 | Removes the elements at pos
+		iterator erase(iterator pos)
+		{
+			size_type index = pos - this->begin();
+
+			if (pos == this->end()) // If pos refers to the last element, then the end() iterator is returned
+				return (this->end());
+
+			for (size_type i = 0 ; begin() + i < this->end(); i++)
+				if (begin() + i >= pos) // on deplace vers la gauche quand i arrive a pos
+					_vector[i] = _vector[i + 1];
+			this->_size--;
+			return (this->begin() + index);
+
+			// size_type index = pos - this->begin(); // -------------- V1
+			// //iterator it = this->begin();
+			// size_type i = 0;
+
+			// if (pos == this->end()) // If pos refers to the last element, then the end() iterator is returned
+			// 	return (this->end());
+
+			// for (; this->begin() + i < pos; i++); // i prends l'index a pos
+			// //i++;
+			// for (; i < _size; ++i)
+			// 	_vector[i - 1] = _vector[i];
+			// this->_size--;
+			// return (this->begin() + index);
+		}
+		// 2 | Removes the elements in the range (first, last)
+		// iterator erase(iterator first, iterator last)
+		// {
+		// 	if (first == last) // If [first, last) is an empty range, then last is returned
+		// 		return (last);
+		// }
 
 		/*
 					ASSIGN()
