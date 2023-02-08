@@ -6,7 +6,7 @@
 /*   By: sleleu <sleleu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 18:58:07 by sleleu            #+#    #+#             */
-/*   Updated: 2023/02/08 19:13:22 by sleleu           ###   ########.fr       */
+/*   Updated: 2023/02/08 20:12:15 by sleleu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,7 +175,7 @@ namespace ft
 		void reserve(size_type new_cap)
 		{
 			if (new_cap > this->max_size())
-				throw (std::length_error("vector reserve() error\n"));
+				throw (std::length_error("vector::reserve"));
 			else if (new_cap > this->capacity())
 			{
 				pointer new_vector;
@@ -219,7 +219,6 @@ namespace ft
 		This causes an automatic reallocation of the allocated storage space if -and only if- the new vector size
 		surpasses the current vector capacity.
 		*/
-	
 		// 1 | inserts value before pos
 		iterator insert(iterator pos, const T& value)
 		{
@@ -235,11 +234,11 @@ namespace ft
 		}
 		
 		// 2 | inserts count copies of the value before pos.
-		iterator insert(iterator pos, size_type count, const T& value)
+		void insert(iterator pos, size_type count, const T& value)
 		{
 			for (; count > 0; count--)
 				this->insert(pos, value);
-			return (this->begin() + count);
+			//return (this->begin() + count);
 		}
 
 		// 3 | inserts elements from range [first, last) before pos
@@ -369,12 +368,14 @@ namespace ft
 		*/
 		void	resize(size_type count, value_type value = value_type())
 		{
+			if (count > _capacity)
+				reserve(count);
 			if (count > this->size())
 				insert(this->end(), count - this->size(), value);
 			else if (count < this->size())
 				erase(this->begin() + count, this->end());
 			else
-				return ;
+				return ; // do nothing <- ISO implementation
 		}
 
 		/*
