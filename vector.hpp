@@ -6,7 +6,7 @@
 /*   By: sleleu <sleleu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 18:58:07 by sleleu            #+#    #+#             */
-/*   Updated: 2023/02/08 13:51:28 by sleleu           ###   ########.fr       */
+/*   Updated: 2023/02/08 16:30:06 by sleleu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -219,6 +219,8 @@ namespace ft
 		This causes an automatic reallocation of the allocated storage space if -and only if- the new vector size
 		surpasses the current vector capacity.
 		*/
+	
+		// 1 | inserts value before pos
 		iterator insert(iterator pos, const T& value)
 		{
 			size_type index = pos - this->begin();
@@ -226,18 +228,40 @@ namespace ft
 			if (_size == _capacity)
 				this->reserve(_size * 2); // realloc si on depasse la capacite
 			for (size_type i = _size; i > index; i--)
-				_vector[i] = _vector[i - 1];
+				_vector[i] = _vector[i - 1]; // deplacement des valeurs vers la droite
 			_vector[index] = value;
 			this->_size++;
 			return (this->begin() + index);	// prevoir une capacite minimale pour eviter les reallocations ?
 		}
-
-		iterator insert(const_iterator pos, size_type count, const T& value)
+		
+		// 2 | inserts count copies of the value before pos.
+		iterator insert(iterator pos, size_type count, const T& value)
 		{
-			
+			for (; count > 0; count--)
+				this->insert(pos, value);
+			return (this->begin() + count);
 		}
-		// template<class InputIt>
-		// iterator insert(const_iterator pos, InputIt first, InputIt last);
+
+		// 3 | inserts elements from range [first, last) before pos
+		template<class InputIt>
+		iterator insert(iterator pos, InputIt first, InputIt last, typename enable_if<!is_integral<InputIt>::value>::type* = 0)
+		{	
+			size_type size = 0;
+			size_type index;
+			vector tmp;
+			InputIt it = first;
+
+			for (; it < last; it++)
+			{
+				tmp.push_back(*it);
+				size++;
+			}
+			index = size;
+			for (; size > 0; size--)
+				this->insert(pos, *first);
+				
+			return (this->begin() + index);
+		}
 		// iterator erase(iterator pos); // Removes the elements at pos
 		// iterator erase(iterator first, iterator last); // Removes the elements in the range (first, last)
 
