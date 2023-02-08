@@ -6,7 +6,7 @@
 /*   By: sleleu <sleleu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 18:58:07 by sleleu            #+#    #+#             */
-/*   Updated: 2023/02/08 16:30:06 by sleleu           ###   ########.fr       */
+/*   Updated: 2023/02/08 17:28:53 by sleleu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -246,21 +246,40 @@ namespace ft
 		template<class InputIt>
 		iterator insert(iterator pos, InputIt first, InputIt last, typename enable_if<!is_integral<InputIt>::value>::type* = 0)
 		{	
-			size_type size = 0;
-			size_type index;
-			vector tmp;
-			InputIt it = first;
+			//----------------------------------------------------- V1 moins optimisee
+			// size_type count = 0;
+			// size_type index;
+			// vector tmp;
+			// InputIt it = first;
 
-			for (; it < last; it++)
-			{
-				tmp.push_back(*it);
-				size++;
-			}
-			index = size;
-			for (; size > 0; size--)
-				this->insert(pos, *first);
-				
-			return (this->begin() + index);
+			// for (; it < last; it++)
+			// {
+			// 	tmp.push_back(*it);
+			// 	count++;
+			// }
+			// index = count;
+			// for (; count > 0; count--)
+			// 	pos = this->insert(pos, tmp[count - 1]);
+			// return (this->begin() + index);
+			// --------------------------------------------------- V2 plus opti mais boucle en plus
+			// size_type size = 0;
+			// size_type index = pos - this->begin();
+			// InputIt it = first;
+
+			// for (; it < last; it++, size++);
+			// index = size;
+			// last--;
+			// for (; size > 0; size--, last--)
+			// 	pos = this->insert(pos, *last);
+			// return (this->begin() + index);
+			
+			size_type index = pos - this->begin();
+
+			last--;
+			for (; first - 1< last; last--)
+				pos = this->insert(pos, *last);
+			return (this->begin() + index);	
+
 		}
 		// iterator erase(iterator pos); // Removes the elements at pos
 		// iterator erase(iterator first, iterator last); // Removes the elements in the range (first, last)
