@@ -6,7 +6,7 @@
 /*   By: sleleu <sleleu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 18:58:07 by sleleu            #+#    #+#             */
-/*   Updated: 2023/02/09 15:47:23 by sleleu           ###   ########.fr       */
+/*   Updated: 2023/02/09 20:54:16 by sleleu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -300,7 +300,6 @@ namespace ft
 		iterator erase(iterator pos)
 		{
 			size_type index = pos - this->begin();
-
 			if (pos == this->end()) // If pos refers to the last element, then the end() iterator is returned
 				return (this->end());
 			for (size_type i = 0 ; begin() + i < this->end(); i++)
@@ -315,12 +314,10 @@ namespace ft
 			size_type remove_dist = 0;
 			size_type i = 0;
 			size_type index;
-
 			if (first == last) // If [first, last) is an empty range, then last is returned
 				return (last);
-
 			for (; begin() + i < first; i++); // placer i sur position du first
-			index = i; // emplacement du erase	
+			index = i; // emplacement du erase
 			for (; first + remove_dist < last; remove_dist++); // calculer l'ecart de distance a remove
 			for (; first + i < this->end(); i++)
 				_vector[i] = _vector[i + remove_dist]; // deplacement vers la gauche en prenant en compte l'ecart a retirer
@@ -377,12 +374,10 @@ namespace ft
 		{
 			if (count > _capacity)
 				reserve(count);
-			if (count > this->size())
+			if (count >= this->size())
 				insert(this->end(), count - this->size(), value);
-			else if (count < this->size())
-				erase(this->begin() + count, this->end());
-			else
-				return ; // do nothing <- ISO implementation
+			if (count < this->size())
+				erase(this->begin() + count, this->end() - 1);
 		}
 
 		/*
