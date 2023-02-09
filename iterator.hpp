@@ -6,7 +6,7 @@
 /*   By: sleleu <sleleu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 13:55:32 by sleleu            #+#    #+#             */
-/*   Updated: 2023/02/09 14:49:58 by sleleu           ###   ########.fr       */
+/*   Updated: 2023/02/09 16:09:34 by sleleu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,15 +115,15 @@ namespace ft
 			this->_it = other.base();
 			return (*this);           
 		}
-		reference operator*() const                                    { iterator_type tmp = _it; return (*--tmp); }	
+		reference operator*() const                                    { iterator_type tmp = base(); return (*--tmp); }	
 		pointer operator->() const                                     { return &(this->operator*());             }
 		reverse_iterator& operator++()                                 { --_it; return (*this);               }
 		reverse_iterator& operator--()                                 { ++_it; return (*this);               }
 		reverse_iterator& operator+=( difference_type n )              { _it -= n; return (*this);            }
 		reverse_iterator& operator-=( difference_type n )              { _it += n; return (*this);            }
-		reverse_iterator operator+( difference_type n ) const          { return (reverse_iterator(base() + n));  }
-		reverse_iterator operator-( difference_type n ) const          { return (reverse_iterator(base() - n));  }
-		reference operator[]( difference_type n ) const                { return (_it[-n-1]);                  }
+		reverse_iterator operator+( difference_type n ) const          { return (reverse_iterator(base() - n));  }
+		reverse_iterator operator-( difference_type n ) const          { return (reverse_iterator(base() + n));  }
+		reference operator[]( difference_type n ) const                { return (base()[-n-1]);                  }
 		iterator_type base() const /* getter  */                       { return this->_it;                    }
 		
 		
@@ -162,10 +162,10 @@ namespace ft
 		{ return (lhs.base() != rhs.base()); }
 		template <class first, class second>
 		bool operator<=(const reverse_iterator<first>& lhs ,const reverse_iterator<second>& rhs)
-		{ return (lhs.base() <= rhs.base()); }
+		{ return (lhs.base() >= rhs.base()); }
 		template <class first, class second>
 		bool operator>=(const reverse_iterator<first>& lhs ,const reverse_iterator<second>& rhs)
-		{ return (lhs.base() >= rhs.base()); }
+		{ return (lhs.base() <= rhs.base()); }
 
 		template <class Iterator>
 		typename reverse_iterator<Iterator>::difference_type operator-(const reverse_iterator<Iterator>& x,
@@ -194,7 +194,7 @@ namespace ft
 		random_access_iterator() { this->current = NULL; };
 		random_access_iterator(const random_access_iterator& src) { this->current = src.current; } // PB ICI ITERATOR SWAP
 		random_access_iterator(const pointer src_ptr) { this->current = src_ptr; }
-		~random_access_iterator() {}
+		virtual ~random_access_iterator() {}
 
 //-------------------------- MEMBER FUNCTIONS -----------------------------------------------------
 		template< class U >

@@ -6,7 +6,7 @@
 /*   By: sleleu <sleleu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 18:58:07 by sleleu            #+#    #+#             */
-/*   Updated: 2023/02/09 14:59:16 by sleleu           ###   ########.fr       */
+/*   Updated: 2023/02/09 15:47:23 by sleleu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -230,9 +230,14 @@ namespace ft
 			iterator new_pos = begin() + i;
 			i = _size; // affecter i a la fin
 			for (; begin() + i > new_pos; i--)
-				_vector[i] = _vector[i - 1]; // deplacer les elements vers la droite
-			_vector[i] = value; // affecter la nouvelle valeur a l'index new_pos
+			{
+				this->_alloc.construct(&_vector[i], _vector[i - 1]);
+				//_vector[i] = _vector[i - 1]; // deplacer les elements vers la droite
+			}
+			this->_alloc.construct(&_vector[i], value);
+			//this->_vector[i] = value; // affecter la nouvelle valeur a l'index new_pos
 			this->_size++;
+			
 			return (new_pos);
 		}
 		
