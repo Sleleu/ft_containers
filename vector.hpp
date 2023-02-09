@@ -6,7 +6,7 @@
 /*   By: sleleu <sleleu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 18:58:07 by sleleu            #+#    #+#             */
-/*   Updated: 2023/02/09 14:22:42 by sleleu           ###   ########.fr       */
+/*   Updated: 2023/02/09 14:59:16 by sleleu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -233,7 +233,6 @@ namespace ft
 				_vector[i] = _vector[i - 1]; // deplacer les elements vers la droite
 			_vector[i] = value; // affecter la nouvelle valeur a l'index new_pos
 			this->_size++;
-
 			return (new_pos);
 		}
 		
