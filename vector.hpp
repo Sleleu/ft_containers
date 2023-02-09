@@ -6,7 +6,7 @@
 /*   By: sleleu <sleleu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 18:58:07 by sleleu            #+#    #+#             */
-/*   Updated: 2023/02/08 20:12:15 by sleleu           ###   ########.fr       */
+/*   Updated: 2023/02/09 14:22:42 by sleleu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -222,23 +222,26 @@ namespace ft
 		// 1 | inserts value before pos
 		iterator insert(iterator pos, const T& value)
 		{
-			size_type index = pos - this->begin();
-			
+			size_type i = 0;
+
+			for (; begin() + i < pos; i++); // incrementer i jusqu'a pos
 			if (_size == _capacity)
-				this->reserve(_size * 2); // realloc si on depasse la capacite
-			for (size_type i = _size; i > index; i--)
-				_vector[i] = _vector[i - 1]; // deplacement des valeurs vers la droite
-			_vector[index] = value;
+				reserve(_size * 2); // si reserve, les pointeurs sont invalides donc recuperer la bonne pos
+			iterator new_pos = begin() + i;
+			i = _size; // affecter i a la fin
+			for (; begin() + i > new_pos; i--)
+				_vector[i] = _vector[i - 1]; // deplacer les elements vers la droite
+			_vector[i] = value; // affecter la nouvelle valeur a l'index new_pos
 			this->_size++;
-			return (this->begin() + index);	// prevoir une capacite minimale pour eviter les reallocations ?
+
+			return (new_pos);
 		}
 		
 		// 2 | inserts count copies of the value before pos.
 		void insert(iterator pos, size_type count, const T& value)
 		{
 			for (; count > 0; count--)
-				this->insert(pos, value);
-			//return (this->begin() + count);
+				pos = this->insert(pos, value); // recuperer l'iterateur ayant potentiellement change apres un reserve()
 		}
 
 		// 3 | inserts elements from range [first, last) before pos
