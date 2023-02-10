@@ -6,7 +6,7 @@
 /*   By: sleleu <sleleu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 18:58:07 by sleleu            #+#    #+#             */
-/*   Updated: 2023/02/10 13:51:40 by sleleu           ###   ########.fr       */
+/*   Updated: 2023/02/10 14:41:52 by sleleu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -230,12 +230,8 @@ namespace ft
 			iterator new_pos = begin() + i;
 			i = _size; // affecter i a la fin
 			for (; begin() + i > new_pos; i--)
-			{
-				this->_alloc.construct(&_vector[i], _vector[i - 1]);
-				//_vector[i] = _vector[i - 1]; // deplacer les elements vers la droite
-			}
-			this->_alloc.construct(&_vector[i], value);
-			//this->_vector[i] = value; // affecter la nouvelle valeur a l'index new_pos
+				this->_alloc.construct(&_vector[i], _vector[i - 1]); // deplacer les elements vers la droite
+			this->_alloc.construct(&_vector[i], value); // affecter la nouvelle valeur a l'index new_pos
 			this->_size++;
 			
 			return (new_pos);
@@ -374,9 +370,9 @@ namespace ft
 		{
 			if (count > _capacity)
 				reserve(count);
-			if (count >= this->size())
+			else if (count >= this->size())
 				insert(this->end(), count - this->size(), value);
-			if (count < this->size())
+			else if (count < this->size())
 				erase(this->begin() + count, this->end() -1);
 			this->_size = count;
 		}
