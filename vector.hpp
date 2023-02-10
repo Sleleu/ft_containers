@@ -6,7 +6,7 @@
 /*   By: sleleu <sleleu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 18:58:07 by sleleu            #+#    #+#             */
-/*   Updated: 2023/02/10 15:14:58 by sleleu           ###   ########.fr       */
+/*   Updated: 2023/02/10 17:20:22 by sleleu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -239,49 +239,29 @@ namespace ft
 		
 		// 2 | inserts count copies of the value before pos.
 		void insert(iterator pos, size_type count, const T& value)
-		{
+		{	
+			size_type i = 0;
+							
+			for (; begin() + i < pos; i++); // incrementer i jusqu'a pos
+			// if (_size + count > _capacity)
+			// 	reserve(_size * 2);
+			// else if (_capacity == _size + count)
+			//   	reserve(_capacity + count);
+			iterator new_pos = begin() + i;
 			for (; count > 0; count--)
-				pos = this->insert(pos, value); // recuperer l'iterateur ayant potentiellement change apres un reserve()
+				new_pos = this->insert(new_pos, value); // recuperer l'iterateur ayant potentiellement change apres un reserve()
 		}
 
 		// 3 | inserts elements from range [first, last) before pos
 		template<class InputIt>
 		iterator insert(iterator pos, InputIt first, InputIt last, typename enable_if<!is_integral<InputIt>::value>::type* = 0)
-		{	
-			//----------------------------------------------------- V1 moins optimisee
-			// size_type count = 0;
-			// size_type index;
-			// vector tmp;
-			// InputIt it = first;
-
-			// for (; it < last; it++)
-			// {
-			// 	tmp.push_back(*it);
-			// 	count++;
-			// }
-			// index = count;
-			// for (; count > 0; count--)
-			// 	pos = this->insert(pos, tmp[count - 1]);
-			// return (this->begin() + index);
-			// --------------------------------------------------- V2 plus opti mais boucle en plus
-			// size_type size = 0;
-			// size_type index = pos - this->begin();
-			// InputIt it = first;
-
-			// for (; it < last; it++, size++);
-			// index = size;
-			// last--;
-			// for (; size > 0; size--, last--)
-			// 	pos = this->insert(pos, *last);
-			// return (this->begin() + index);
-			
+		{				
 			size_type index = pos - this->begin();
 
 			last--;
 			for (; first - 1 < last; last--)
 				pos = this->insert(pos, *last);
-			return (this->begin() + index);	
-
+			return (this->begin() + index);
 		}
 
 		/*
@@ -373,9 +353,7 @@ namespace ft
 			if (count >= this->size())
 				insert(this->end(), count - this->size(), value);
 			if (count < this->size())
-			{
 				erase(this->begin() + count, this->end() - 1);
-			}
 			this->_size = count;
 		}
 
