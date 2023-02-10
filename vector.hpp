@@ -6,7 +6,7 @@
 /*   By: sleleu <sleleu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 18:58:07 by sleleu            #+#    #+#             */
-/*   Updated: 2023/02/10 17:20:22 by sleleu           ###   ########.fr       */
+/*   Updated: 2023/02/10 17:47:56 by sleleu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -243,10 +243,8 @@ namespace ft
 			size_type i = 0;
 							
 			for (; begin() + i < pos; i++); // incrementer i jusqu'a pos
-			// if (_size + count > _capacity)
-			// 	reserve(_size * 2);
-			// else if (_capacity == _size + count)
-			//   	reserve(_capacity + count);
+			if (_size + count + 1 >= _capacity) // ajout a supprimer si pas de fix de size test
+			 	reserve(_size * 2);
 			iterator new_pos = begin() + i;
 			for (; count > 0; count--)
 				new_pos = this->insert(new_pos, value); // recuperer l'iterateur ayant potentiellement change apres un reserve()
@@ -279,8 +277,8 @@ namespace ft
 			if (pos == this->end()) // If pos refers to the last element, then the end() iterator is returned
 				return (this->end());
 			for (size_type i = 0 ; begin() + i < this->end(); i++)
-				if (begin() + i >= pos) // on deplace vers la gauche quand i arrive a pos
-					_vector[i] = _vector[i + 1];
+				if (begin() + i > pos) // on deplace vers la gauche quand i arrive a pos
+					_vector[i - 1] = _vector[i];
 			this->_size--;
 			return (this->begin() + index);
 		}
@@ -295,7 +293,7 @@ namespace ft
 			for (; begin() + i < first; i++); // placer i sur position du first
 			index = i; // emplacement du erase
 			for (; first + remove_dist < last; remove_dist++); // calculer l'ecart de distance a remove
-			for (; first + i < this->end() - 1; i++)
+			for (; first + i < this->end(); i++)
 				_vector[i] = _vector[i + remove_dist]; // deplacement vers la gauche en prenant en compte l'ecart a retirer
 			this->_size -= remove_dist;
 			return (this->begin() + index);
