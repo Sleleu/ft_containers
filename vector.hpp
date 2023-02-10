@@ -6,7 +6,7 @@
 /*   By: sleleu <sleleu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 18:58:07 by sleleu            #+#    #+#             */
-/*   Updated: 2023/02/09 20:54:16 by sleleu           ###   ########.fr       */
+/*   Updated: 2023/02/10 13:51:40 by sleleu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ namespace ft
 		}
 		
 		/* 4 | copy | Constructs the container with the copy of the contents of other */
-		vector(const vector& other) : _alloc(other._alloc), _size(other._size) ,_capacity(other._capacity)
+		vector(const vector& other) : _alloc(other._alloc), _size(other._size) ,_capacity(other._size)
 		{
 			vector::const_iterator it = other.begin();
 
@@ -319,7 +319,7 @@ namespace ft
 			for (; begin() + i < first; i++); // placer i sur position du first
 			index = i; // emplacement du erase
 			for (; first + remove_dist < last; remove_dist++); // calculer l'ecart de distance a remove
-			for (; first + i < this->end(); i++)
+			for (; first + i < this->end() - 1; i++)
 				_vector[i] = _vector[i + remove_dist]; // deplacement vers la gauche en prenant en compte l'ecart a retirer
 			this->_size -= remove_dist;
 			return (this->begin() + index);
@@ -377,7 +377,8 @@ namespace ft
 			if (count >= this->size())
 				insert(this->end(), count - this->size(), value);
 			if (count < this->size())
-				erase(this->begin() + count, this->end() - 1);
+				erase(this->begin() + count, this->end() -1);
+			this->_size = count;
 		}
 
 		/*
