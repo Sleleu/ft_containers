@@ -6,7 +6,7 @@
 /*   By: sleleu <sleleu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 18:58:07 by sleleu            #+#    #+#             */
-/*   Updated: 2023/02/10 17:47:56 by sleleu           ###   ########.fr       */
+/*   Updated: 2023/02/10 22:45:36 by sleleu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -235,6 +235,12 @@ namespace ft
 			this->_size++;
 			
 			return (new_pos);
+			//--------------------------------------------------------------------------------------
+			// size_type i = 0;
+			// for (; begin() + i < pos; i++); 
+			// insert(pos, 1, value);
+			// iterator new_pos = begin() + i;
+			// return (new_pos);
 		}
 		
 		// 2 | inserts count copies of the value before pos.
@@ -243,11 +249,31 @@ namespace ft
 			size_type i = 0;
 							
 			for (; begin() + i < pos; i++); // incrementer i jusqu'a pos
-			if (_size + count + 1 >= _capacity) // ajout a supprimer si pas de fix de size test
-			 	reserve(_size * 2);
+			// if (_capacity < _size + count)
+			// 	reserve(_size + count);
+			if (_capacity <= _size + count) // CONDITION QUI MARCHE POUR 2 DIFF
+				reserve(_size * 2);
 			iterator new_pos = begin() + i;
 			for (; count > 0; count--)
 				new_pos = this->insert(new_pos, value); // recuperer l'iterateur ayant potentiellement change apres un reserve()
+			//------------------------------------------------------------------------------------------
+			
+			// size_type i = 0;
+
+			// for (; begin() + i <= pos; i++); // incrementer i jusqu'a pos
+			// if (_size == _capacity)
+			// 	reserve(_size * 2); // si reserve, les pointeurs sont invalides donc recuperer la bonne pos
+			// else if (_size + count >= _capacity)
+			// 	reserve(_size + count + 1);
+			// iterator new_pos = begin() + i;
+			// i = _size; // affecter i a la fin
+			// for (; begin() + i > new_pos; i--)
+			// 	this->_alloc.construct(&_vector[i + count], _vector[i]); // deplacer les elements vers la droite
+			// i = count;
+			// for (; begin() + i >= new_pos ; i--)
+			// 	this->_alloc.construct(&_vector[i], value); // affecter la nouvelle valeur a l'index new_pos
+			// this->_size += count; // brouillon
+ 
 		}
 
 		// 3 | inserts elements from range [first, last) before pos
