@@ -6,7 +6,7 @@
 /*   By: sleleu <sleleu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 18:58:07 by sleleu            #+#    #+#             */
-/*   Updated: 2023/02/10 14:41:52 by sleleu           ###   ########.fr       */
+/*   Updated: 2023/02/10 15:14:58 by sleleu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -370,10 +370,12 @@ namespace ft
 		{
 			if (count > _capacity)
 				reserve(count);
-			else if (count >= this->size())
+			if (count >= this->size())
 				insert(this->end(), count - this->size(), value);
-			else if (count < this->size())
-				erase(this->begin() + count, this->end() -1);
+			if (count < this->size())
+			{
+				erase(this->begin() + count, this->end() - 1);
+			}
 			this->_size = count;
 		}
 
